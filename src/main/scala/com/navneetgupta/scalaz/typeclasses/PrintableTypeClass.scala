@@ -29,17 +29,21 @@ object PrintableInstnces {
 object PrintableApp extends App {
   import PrintableInstnces._
 
+  type OptionalOrder = Option[Order]
+  type OptionalInt = Option[Int]
+  type OptionalString = Option[String]
+
   println(implicitly[Printable[Order]].format(Order(22.232, 43423.23)))
-  println(implicitly[Printable[Option[Order]]].format(Some(Order(22.232, 43423.23))))
-  println(implicitly[Printable[Option[Order]]].format(None))
+  println(implicitly[Printable[OptionalOrder]].format(Some(Order(22.232, 43423.23))))
+  println(implicitly[Printable[OptionalOrder]].format(None))
 
   println(implicitly[Printable[Int]].format(1))
-  println(implicitly[Printable[Option[Int]]].format(Some(1)))
-  println(implicitly[Printable[Option[Int]]].format(None))
+  println(implicitly[Printable[OptionalInt]].format(Some(1)))
+  println(implicitly[Printable[OptionalInt]].format(None))
 
   println(implicitly[Printable[String]].format("Navneet gupta"))
-  println(implicitly[Printable[Option[String]]].format(Some("Navneet Gupta")))
-  println(implicitly[Printable[Option[String]]].format(None))
+  println(implicitly[Printable[OptionalString]].format(Some("Navneet Gupta")))
+  println(implicitly[Printable[OptionalString]].format(None))
 }
 
 /**
@@ -53,17 +57,21 @@ object Printable {
 object PrintableApp2 extends App {
   import PrintableInstnces._
 
+  type OptionalOrder = Option[Order]
+  type OptionalInt = Option[Int]
+  type OptionalString = Option[String]
+
   println(Printable.toString(Order(22.232, 43423.23)))
-  println(Printable.toString[Option[Order]](Some(Order(22.232, 43423.23))))
-  println(Printable.toString[Option[Order]](None))
+  println(Printable.toString[OptionalOrder](Some(Order(22.232, 43423.23))))
+  println(Printable.toString[OptionalOrder](None))
 
   println(Printable.toString(1))
-  println(Printable.toString[Option[Int]](Some(1)))
-  println(Printable.toString[Option[Int]](None))
+  println(Printable.toString[OptionalInt](Some(1)))
+  println(Printable.toString[OptionalInt](None))
 
   println(Printable.toString("Navneet Gupta"))
-  println(Printable.toString[Option[String]](Some("Navneet Gupta")))
-  println(Printable.toString[Option[String]](None))
+  println(Printable.toString[OptionalString](Some("Navneet Gupta")))
+  println(Printable.toString[OptionalString](None))
 }
 
 /**
@@ -86,19 +94,23 @@ object PrintableApp3 extends App {
   import PrintableInstnces._
   import PrintbaleSyntax._
 
+  type OptionalOrder = Option[Order]
+  type OptionalInt = Option[Int]
+  type OptionalString = Option[String]
+
   println(Order(22.232, 43423.23).print)
   println(Some(Order(22.232, 43423.23)).print)
-  val a: Option[Order] = None
+  val a: OptionalOrder = None
   println(a.print)
 
   println(1.print)
   println(Some(1).print)
-  val b: Option[Int] = None
+  val b: OptionalInt = None
   println(b.print)
 
   println("Navneet Gupta".print)
   println(Some("Navneet Gupta").print)
-  val c: Option[String] = None
+  val c: OptionalString = None
   println(c.print)
 
 }
