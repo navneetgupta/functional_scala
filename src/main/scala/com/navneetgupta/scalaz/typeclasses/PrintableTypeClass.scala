@@ -1,9 +1,27 @@
 package com.navneetgupta.scalaz.typeclasses
 
+/**
+ * TypeClasses are basically a pattern that allow us to extend existing libraries with additional functionality,
+ * without using traditional inheritance, and without altering the original library source code
+ */
+
+/**
+ * Important Components/Parts of TypeClass are:
+ * 1.   the type class itself
+ * 2.   instances for particular types, and
+ * 3.   the interface methods that we expose to users.
+ */
+
+/**
+ *  1.   the type class itself
+ */
 trait Printable[A] {
   def format(a: A): String
 }
 
+/**
+ * 2.   instances for particular types, and
+ */
 object PrintableInstnces {
   implicit val intPrintableInstances: Printable[Int] = new Printable[Int] {
     override def format(a: Int): String = a.toString()
@@ -47,7 +65,7 @@ object PrintableApp extends App {
 }
 
 /**
- * Interface Methods for Printable
+ * 3.   the interface methods that we expose to users.
  */
 
 object Printable {
@@ -75,7 +93,7 @@ object PrintableApp2 extends App {
 }
 
 /**
- * Interface Syntax
+ * Interface Syntax for More Concise Access
  */
 
 object PrintbaleSyntax {
