@@ -33,14 +33,14 @@ object CustomEqInstances {
   }
 
   // OptionEq can be used
-  //  implicit def optionEq[A <: Eq[A]](implicit eqIns: Eq[A]): Eq[Option[A]] =
-  //    Eq.instance[Option[A]] {
-  //      (o1, o2) =>
-  //        (o1, o2) match {
-  //          case (Some(x), Some(y)) => x === y
-  //          case _                  => false
-  //        }
-  //    }
+  implicit def optionEq[A <: Eq[A]](implicit eqIns: Eq[A]): Eq[Option[A]] =
+    Eq.instance[Option[A]] {
+      (o1, o2) =>
+        (o1, o2) match {
+          case (Some(x), Some(y)) => x === y
+          case _                  => false
+        }
+    }
 
   // Some Data
 }
