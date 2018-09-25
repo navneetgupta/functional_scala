@@ -70,7 +70,7 @@ object CustomEqInstances2 {
   }
 
   // OptionEq can be used
-  implicit def optionEq[A <: Eq[A]](implicit eqIns: Eq[A]): Eq[Option[A]] =
+  implicit def optionEq[A: Eq](implicit eqIns: Eq[A]): Eq[Option[A]] =
     new Eq[Option[A]] {
       def eqv(o1: Option[A], o2: Option[A]): Boolean =
         (o1, o2) match {
