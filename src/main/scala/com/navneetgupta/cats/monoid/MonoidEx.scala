@@ -10,6 +10,8 @@ import cats.Monoid
  *
  * For all values x, y, and z, in A, combine must be associative and empty must be an identity element
  *
+ * def combineAll[A <: Monoid[A]](list: List[A]): A = ???
+ *
  */
 
 object Data {
