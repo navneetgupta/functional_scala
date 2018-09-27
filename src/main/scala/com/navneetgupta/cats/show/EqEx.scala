@@ -28,19 +28,29 @@ object CustomEqInstances {
   implicit val studentEq: Eq[Student] = Eq.instance[Student] { (s1, s2) =>
     s1.id === s2.id
   }
+
   implicit val orderEq: Eq[Order] = Eq.instance[Order] { (o1, o2) =>
     o1.quantity === o2.quantity && o1.amount === o2.amount
   }
 
   // OptionEq can be used
-  implicit def optionEq[A <: Eq[A]](implicit eqIns: Eq[A]): Eq[Option[A]] =
-    Eq.instance[Option[A]] {
-      (o1, o2) =>
-        (o1, o2) match {
-          case (Some(x), Some(y)) => x === y
-          case _                  => false
-        }
-    }
+  //  implicit def optionEq[A <: Eq[A]](implicit eqIns: Eq[A]): Eq[Option[A]] =
+  //    Eq.instance[Option[A]] {
+  //      (o1, o2) =>
+  //        (o1, o2) match {
+  //          case (Some(x), Some(y)) => x === y
+  //          case _                  => false
+  //        }
+  //    }
+  //
+  //  implicit def optionEq[A](A: Eq[A]): Eq[Option[A]] =
+  //    Eq.instance[Option[A]] {
+  //      (o1, o2) =>
+  //        (o1, o2) match {
+  //          case (Some(x), Some(y)) => A.eqv(x, y)
+  //          case _                  => false
+  //        }
+  //    }
 
   // Some Data
 }
@@ -70,14 +80,14 @@ object CustomEqInstances2 {
   }
 
   // OptionEq can be used
-  implicit def optionEq[A: Eq](implicit eqIns: Eq[A]): Eq[Option[A]] =
-    new Eq[Option[A]] {
-      def eqv(o1: Option[A], o2: Option[A]): Boolean =
-        (o1, o2) match {
-          case (Some(x), Some(y)) => x === y
-          case _                  => false
-        }
-    }
+  //  implicit def optionEq[A <: Eq[A]](implicit eqIns: Eq[A]): Eq[Option[A]] =
+  //    new Eq[Option[A]] {
+  //      def eqv(o1: Option[A], o2: Option[A]): Boolean =
+  //        (o1, o2) match {
+  //          case (Some(x), Some(y)) => x === y
+  //          case _                  => false
+  //        }
+  //    }
 }
 
 object EqEx extends App {
