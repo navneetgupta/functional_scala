@@ -29,36 +29,6 @@ import com.navneetgupta.common._
  *     Composition: mapping with two functions f and g is the same as mapping with f and then mapping with g: fa.map(g(f(_))) == fa.map(f).map(g)
  */
 
-/**
- * Futures and Referen􏰂al Transparency
- * Note that Scala’s Futures aren’t a great example of pure functional programming because they aren’t refrentially transparent.
- * Future always computes and caches a result and there’s no way for us to tweak this behaviour.
- *
- * val future1 = {
- *     // Initialize Random with a fixed seed:
- *     val r = new Random(0L)
- *     // nextInt has the side-effect of moving to
- *     // the next random number in the sequence:
- *     val x = Future(r.nextInt)
- *     for {
- *       a <- x
- *       b <- x
- *     } yield (a, b)
- * }
- * val future2 = {
- *     val r = new Random(0L)
- *     for {
- *       a <- Future(r.nextInt)
- *       b <- Future(r.nextInt)
- *     } yield (a, b)
- * }
- *
- * val result1 = Await.result(future1, 1.second)
- * // result1: (Int, Int) = (-1155484576,-1155484576)
- * val result2 = Await.result(future2, 1.second)
- * // result2: (Int, Int) = (-1155484576,-723955400)
- */
-
 sealed trait Tree[+A]
 final case class Branch[A](left: Tree[A], right: Tree[A]) extends Tree[A]
 final case class Leaf[A](value: A) extends Tree[A]
@@ -100,8 +70,4 @@ object FunctorsEx3 extends App {
   val treeFunctorRes = Functor.apply[Tree].map(Data.t1)(_ * 2)
   println(treeFunctorRes)
 
-}
-trait Monad[F[_]] {
-  def pure[A](value: A): F[A]
-  def flatMap[A, B](value: F[A])(func: A => F[B]): F[B]
 }
