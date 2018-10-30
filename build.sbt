@@ -20,6 +20,7 @@ libraryDependencies ++= {
 	Seq(
 		"com.typesafe.akka" %% "akka-actor" % akkaVersion,
 		"org.scalaz" %% "scalaz-core" % "7.2.26",
+		"org.scalaz" %% "scalaz-concurrent" % "7.2.26",
 		"org.typelevel" %% "cats-core" % catVersion,
 	    "org.typelevel" %% "cats-macros" % catVersion,
 	    "org.typelevel" %% "cats-kernel" % catVersion,

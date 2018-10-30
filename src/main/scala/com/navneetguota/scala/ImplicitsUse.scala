@@ -72,20 +72,20 @@ object ImplicitsUseWithImplicts2 extends App {
     }
   }
 
-  def readPerson = {
-    implicit config: Config => {
-      try Some(Person(readName, readAge))
-      catch { case ex: IllegalArgumentException => None }
-    }
-  }
-
-  implicit val config = Config("John Doe", 20)
-  println(readPerson)
-  //implicit val config2 = Config("John Doe", 20)
-  println(readPerson)
+//  def readPerson = {
+//    implicit config: Config => {
+//      try Some(Person(readName, readAge))
+//      catch { case ex: IllegalArgumentException => None }
+//    }
+//  }
+//
+//  implicit val config = Config("John Doe", 20)
+//  println(readPerson)
+//  //implicit val config2 = Config("John Doe", 20)
+//  println(readPerson)
 }
 
 object Configs {
-  type Configured[T] = implicit Config => T
-  def config: Configured[Config] = implicitly[Config]
+//  type Configured[T] = implicit Config => T
+//  def config: Configured[Config] = implicitly[Config]
 }
