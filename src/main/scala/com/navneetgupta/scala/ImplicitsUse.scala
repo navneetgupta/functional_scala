@@ -1,4 +1,4 @@
-package com.navneetguota.scala
+package com.navneetgupta.scala
 
 case class Name(firstName: String, lastName: String)
 case class Age(age: Int)
