@@ -19,6 +19,7 @@ object MonoidData {
 }
 
 object MonoidEx extends App {
+
   import cats.instances.option._
   import cats.instances.list._
   import derived.auto.monoid._
@@ -36,6 +37,7 @@ object MonoidEx extends App {
 }
 
 object MonoidEx2 extends App {
+
   import cats.instances.option._
   import cats.instances.list._
   import MonoidData._
@@ -53,6 +55,7 @@ object MonoidEx2 extends App {
 }
 
 object MonoidEx3 extends App {
+
   import cats.instances.option._
   import cats.instances.list._
   import derived.auto.monoid._
@@ -69,6 +72,7 @@ object MonoidEx3 extends App {
 }
 
 object MonoidEx4 extends App {
+
   import cats.instances.option._
   import cats.instances.list._
   import MonoidData._
@@ -86,6 +90,7 @@ object MonoidEx4 extends App {
 }
 
 object MonoidEx5 extends App {
+
   import cats.instances.option._
   import cats.instances.list._
   import derived.auto.monoid._
@@ -103,6 +108,7 @@ object MonoidEx5 extends App {
 }
 
 object MonoidEx6 extends App {
+
   import cats.instances.option._
   import cats.instances.list._
   import MonoidData._

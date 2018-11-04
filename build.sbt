@@ -1,4 +1,4 @@
-import Dependencies._
+
 
 name := "scalaz7_examples"
 
@@ -11,8 +11,11 @@ version      := "0.1.0"
 scalacOptions ++= Seq(
   "-Xfatal-warnings",
   "-Ypartial-unification",
-  "-language:higherKinds"
+  "-language:higherKinds",
+  "-language:implicitConversions"
 )
+
+addCompilerPlugin("org.scalamacros" % "paradise" % "2.1.0" cross CrossVersion.full)
 
 libraryDependencies ++= {
 	val akkaVersion = "2.5.13"
@@ -28,6 +31,7 @@ libraryDependencies ++= {
 	    "org.typelevel" %% "cats-free" % catVersion,
 	    "org.typelevel" %% "cats-free" % catVersion,
 	    "org.typelevel" %% "cats-effect" % "1.0.0-RC2",
-	    "org.typelevel" %% "kittens" % "1.1.1"
+	    "org.typelevel" %% "kittens" % "1.1.1",
+	    "com.github.mpilquist" %% "simulacrum" % "0.14.0"
 	)
 }

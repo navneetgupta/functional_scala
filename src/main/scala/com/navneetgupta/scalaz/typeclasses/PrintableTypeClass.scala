@@ -1,27 +1,27 @@
 package com.navneetgupta.scalaz.typeclasses
 
 /**
- * TypeClasses are basically a pattern that allow us to extend existing libraries with additional functionality,
- * without using traditional inheritance, and without altering the original library source code
- */
+  * TypeClasses are basically a pattern that allow us to extend existing libraries with additional functionality,
+  * without using traditional inheritance, and without altering the original library source code
+  */
 
 /**
- * Important Components/Parts of TypeClass are:
- * 1.   the type class itself
- * 2.   instances for particular types, and
- * 3.   the interface methods that we expose to users.
- */
+  * Important Components/Parts of TypeClass are:
+  * 1.   the type class itself
+  * 2.   instances for particular types, and
+  * 3.   the interface methods that we expose to users.
+  */
 
 /**
- *  1.   the type class itself
- */
+  *  1.   the type class itself
+  */
 trait Printable[A] {
   def format(a: A): String
 }
 
 /**
- * 2.   instances for particular types, and
- */
+  * 2.   instances for particular types, and
+  */
 object PrintableInstnces {
   implicit val intPrintableInstances: Printable[Int] = new Printable[Int] {
     override def format(a: Int): String = a.toString()
@@ -39,12 +39,13 @@ object PrintableInstnces {
     new Printable[Option[A]] {
       def format(a: Option[A]): String = a match {
         case Some(x) => printable.format(x)
-        case _       => ""
+        case _ => ""
       }
     }
 }
 
 object PrintableApp extends App {
+
   import PrintableInstnces._
 
   type OptionalOrder = Option[Order]
@@ -65,14 +66,15 @@ object PrintableApp extends App {
 }
 
 /**
- * 3.   the interface methods that we expose to users.
- */
+  * 3.   the interface methods that we expose to users.
+  */
 
 object Printable {
   def toString[A](a: A)(implicit m: Printable[A]) = m.format(a)
 }
 
 object PrintableApp2 extends App {
+
   import PrintableInstnces._
 
   type OptionalOrder = Option[Order]
@@ -93,22 +95,26 @@ object PrintableApp2 extends App {
 }
 
 /**
- * Interface Syntax for More Concise Access
- */
+  * Interface Syntax for More Concise Access
+  */
 
 object PrintbaleSyntax {
+
   implicit class printableSyntax[A](a: A) {
     def print(implicit p: Printable[A]): String = p.format(a)
   }
+
   implicit class optionPrintableSyntax[A](a: Option[A]) {
     def print(implicit p: Printable[A]): String = a match {
       case Some(x) => p.format(x)
-      case _       => ""
+      case _ => ""
     }
   }
+
 }
 
 object PrintableApp3 extends App {
+
   import PrintableInstnces._
   import PrintbaleSyntax._
 

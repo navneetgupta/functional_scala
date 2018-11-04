@@ -3,14 +3,17 @@ package com.navneetgupta.scalaz.others
 import scalaz._, Scalaz._
 
 object StateEx {
+
   case class User(id: Int, firstName: String, lastName: String)
 
   trait Cache {
 
     def hits: Int
+
     def misses: Int
 
     def insert(user: User): Unit
+
     def get(id: Int): Option[User]
   }
 
@@ -34,7 +37,7 @@ object StateEx {
   class RepositorySerivce extends Repository {
 
     def find(id: Int): String \/ User =
-      // some real calls to storage, like JDBC etc.
+    // some real calls to storage, like JDBC etc.
       User(id, s"John$id", "Smith").right
 
   }
@@ -52,39 +55,39 @@ object StateEx {
   }
 
   /**
-   * class UserServiceTest {
-   * test("that can find user if in cache") {
-   * // given
-   * val id: Int = 10
-   * val user = User(id, "first", "last")
-   * val mockCache = mock[Cache]
-   * given(mockCache.get(id)).willReturn(user.some)
-   * // when
-   * val result = new UserService(mockCache, mock[Repository]).findById(id)
-   * // then
-   * result should be(user)
-   * // ... hits =?= hits + 1
-   * }
-   *
-   * test("that can find user if in cache") {
-   * // given
-   * val id: Int = 10
-   * val user = User(id. "first", "last")
-   * val mockCache = mock[Cache]
-   * given(mockCache.get(id)).willReturn(None)
-   * val mockRepository = mock[Repository]
-   * given(mockRepository.findById(id)).willReturn(user.right)
-   * // when
-   * val result = new UserService(mockCache, mock[Repository]).findById(id)
-   * // then
-   * result should be(user)
-   *
-   * // ... hits =?= hits + 1
-   * }
-   *
-   * }
-   *
-   */
+    * class UserServiceTest {
+    * test("that can find user if in cache") {
+    * // given
+    * val id: Int = 10
+    * val user = User(id, "first", "last")
+    * val mockCache = mock[Cache]
+    * given(mockCache.get(id)).willReturn(user.some)
+    * // when
+    * val result = new UserService(mockCache, mock[Repository]).findById(id)
+    * // then
+    * result should be(user)
+    * // ... hits =?= hits + 1
+    * }
+    *
+    * test("that can find user if in cache") {
+    * // given
+    * val id: Int = 10
+    * val user = User(id. "first", "last")
+    * val mockCache = mock[Cache]
+    * given(mockCache.get(id)).willReturn(None)
+    * val mockRepository = mock[Repository]
+    * given(mockRepository.findById(id)).willReturn(user.right)
+    * // when
+    * val result = new UserService(mockCache, mock[Repository]).findById(id)
+    * // then
+    * result should be(user)
+    *
+    * // ... hits =?= hits + 1
+    * }
+    *
+    * }
+    *
+    */
 
   //functional programming is more about modularity
 }

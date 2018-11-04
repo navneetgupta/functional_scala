@@ -19,6 +19,7 @@ object EqData {
 }
 
 object EqEx extends App {
+
   import EqData._
   import derived.auto.eq._
   import cats.instances.int._
@@ -68,6 +69,7 @@ object EqEx extends App {
 }
 
 object EqEx2 extends App {
+
   import EqData._
   import cats.instances.int._
   import cats.instances.option._
@@ -119,10 +121,12 @@ object EqEx2 extends App {
 }
 
 object EqEx3 extends App {
+
   import cats.instances.int._
   import cats.instances.option._
   import cats.instances.list._
   import EqData._
+
   implicit val orderEq: Eq[Order] = derived.semi.eq
   implicit val studentEq: Eq[Student] = derived.semi.eq
 
@@ -172,11 +176,13 @@ object EqEx3 extends App {
 }
 
 object EqEx4 extends App {
+
   import cats.instances.int._
   import cats.syntax.eq._
   import cats.instances.option._
   import cats.instances.list._
   import EqData._
+
   implicit val orderEq: Eq[Order] = derived.semi.eq
   implicit val studentEq: Eq[Student] = derived.semi.eq
 

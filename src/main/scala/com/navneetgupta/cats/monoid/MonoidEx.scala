@@ -4,15 +4,15 @@ import com.navneetgupta.common._
 import cats.Monoid
 
 /**
- * Formally, a monoid for a type A is:
- *     • an operation `combine` with type (A,A ) => A
- *     • an element empty of type A
- *
- * For all values x, y, and z, in A, combine must be associative and empty must be an identity element
- *
- * def combineAll[A <: Monoid[A]](list: List[A]): A = ???
- *
- */
+  * Formally, a monoid for a type A is:
+  * • an operation `combine` with type (A,A ) => A
+  * • an element empty of type A
+  *
+  * For all values x, y, and z, in A, combine must be associative and empty must be an identity element
+  *
+  * def combineAll[A <: Monoid[A]](list: List[A]): A = ???
+  *
+  */
 
 object Data {
   val o1 = Order(23.2323, 34343.232)
@@ -30,12 +30,14 @@ object Data {
 object CustomMonoidInstances {
   implicit val orderMonoid = new Monoid[Order] {
     def combine(o1: Order, o2: Order): Order = Order(o1.quantity + o2.quantity, o1.amount + o2.amount)
+
     def empty: Order = Order(0.0, 0.0)
   }
   // We can define studentMonoid but it doesn't make any sense of combining student
 }
 
 object MonoidEx extends App {
+
   import CustomMonoidInstances._
   import Data._
 
@@ -53,6 +55,7 @@ object MonoidEx extends App {
 }
 
 object MonoidEx2 extends App {
+
   import CustomMonoidInstances._
   import Data._
 
@@ -70,6 +73,7 @@ object MonoidEx2 extends App {
 }
 
 object MonoidEx3 extends App {
+
   import CustomMonoidInstances._
   import Data._
 

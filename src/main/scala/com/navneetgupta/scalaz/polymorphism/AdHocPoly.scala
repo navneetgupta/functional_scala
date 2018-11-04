@@ -4,6 +4,7 @@ import scalaz._
 import Scalaz._
 
 case class Order(quantity: Double, amount: Double)
+
 object Order {
   implicit val orderEq: Equal[Order] =
     Equal[Order] { (o1, o2) =>

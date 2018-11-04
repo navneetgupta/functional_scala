@@ -5,3 +5,5 @@
 .settings/
 bin/
 target/
+.idea/
+scalaz7_examples.iml

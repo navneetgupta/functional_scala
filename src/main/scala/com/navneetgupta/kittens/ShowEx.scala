@@ -19,9 +19,10 @@ object Data {
 }
 
 /**
- * Using `auto` type derivation
- */
+  * Using `auto` type derivation
+  */
 object ShowEx extends App {
+
   import cats.instances.int._
   import cats.syntax.show._
   import cats.instances.option._
@@ -58,9 +59,10 @@ object ShowEx extends App {
 }
 
 /**
- * Using `semi` type derivation
- */
+  * Using `semi` type derivation
+  */
 object ShowEx2 extends App {
+
   import cats.instances.int._
   import cats.syntax.show._
   import cats.instances.option._

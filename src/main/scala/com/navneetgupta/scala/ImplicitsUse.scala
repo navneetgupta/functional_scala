@@ -1,8 +1,11 @@
 package com.navneetgupta.scala
 
 case class Name(firstName: String, lastName: String)
+
 case class Age(age: Int)
+
 case class Person(name: Name, age: Age)
+
 case class Config(name: String, age: Int)
 
 object ImplicitsUse extends App {
@@ -20,12 +23,15 @@ object ImplicitsUse extends App {
 
   def readPerson(config: Config): Option[Person] = {
     try Some(Person(readName(config), readAge(config)))
-    catch { case ex: IllegalArgumentException => None }
+    catch {
+      case ex: IllegalArgumentException => None
+    }
   }
 
   println(readPerson(Config("John Doe", 20)))
   println(readPerson(Config("Incognito", 99)))
 }
+
 // Above lots of params need to be passed arround Suppose if we have to parse multiple person attribute color, sex,education,location,address,experience etc
 
 object ImplicitsUseWithImplicts extends App {
@@ -43,7 +49,9 @@ object ImplicitsUseWithImplicts extends App {
 
   def readPerson(implicit config: Config): Option[Person] = {
     try Some(Person(readName, readAge))
-    catch { case ex: IllegalArgumentException => None }
+    catch {
+      case ex: IllegalArgumentException => None
+    }
   }
 
   implicit val config = Config("John Doe", 20)
@@ -72,20 +80,20 @@ object ImplicitsUseWithImplicts2 extends App {
     }
   }
 
-//  def readPerson = {
-//    implicit config: Config => {
-//      try Some(Person(readName, readAge))
-//      catch { case ex: IllegalArgumentException => None }
-//    }
-//  }
-//
-//  implicit val config = Config("John Doe", 20)
-//  println(readPerson)
-//  //implicit val config2 = Config("John Doe", 20)
-//  println(readPerson)
+  //  def readPerson = {
+  //    implicit config: Config => {
+  //      try Some(Person(readName, readAge))
+  //      catch { case ex: IllegalArgumentException => None }
+  //    }
+  //  }
+  //
+  //  implicit val config = Config("John Doe", 20)
+  //  println(readPerson)
+  //  //implicit val config2 = Config("John Doe", 20)
+  //  println(readPerson)
 }
 
 object Configs {
-//  type Configured[T] = implicit Config => T
-//  def config: Configured[Config] = implicitly[Config]
+  //  type Configured[T] = implicit Config => T
+  //  def config: Configured[Config] = implicitly[Config]
 }

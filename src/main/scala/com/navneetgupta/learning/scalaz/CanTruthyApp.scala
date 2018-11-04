@@ -7,6 +7,7 @@ object CanTruthyApp extends App {
   trait CanTruthy[A] {
     def truthys(a: A): Boolean
   }
+
   object CanTruthy {
 
     def apply[A: CanTruthy]: CanTruthy[A] = implicitly[CanTruthy[A]]
@@ -14,7 +15,9 @@ object CanTruthyApp extends App {
     implicit class CanTruthyOps[A: CanTruthy](a: A) {
       def truthys: Boolean = CanTruthy[A].truthys(a)
     }
+
   }
+
   import CanTruthy._
 
   implicit val intCanTruthy: CanTruthy[Int] = new CanTruthy[Int] {

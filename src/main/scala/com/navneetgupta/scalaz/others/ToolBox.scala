@@ -8,10 +8,10 @@ object ToolBox {
 
   val plus: (Int, Int) => Int = _ + _
 
-  def lengthOperation[F[_]: Functor](str: F[String]): F[Int] = str.map(length)
+  def lengthOperation[F[_] : Functor](str: F[String]): F[Int] = str.map(length)
 
   /// Fucntor map takes only one param but here we have two
-  def plusOperation[F[_]: Functor](f1: F[Int], f2: F[Int]): F[Int] = ??? // {
+  def plusOperation[F[_] : Functor](f1: F[Int], f2: F[Int]): F[Int] = ??? // {
   // We can do it by making a one param function using curry
 
   //val temp: F[Int => Int] = f1.map(plus.curried)
@@ -19,7 +19,7 @@ object ToolBox {
   // def ap[A,B](fa: => F[A])(f: => F[A=>B]): F[B] Whihc is waht we need so we can rewrite plusOperation as below
   // }
 
-  def plusOperation1[F[_]: Apply](f1: F[Int], f2: F[Int]): F[Int] = {
+  def plusOperation1[F[_] : Apply](f1: F[Int], f2: F[Int]): F[Int] = {
     //Apply[F].ap(f2)(temp)
 
     //    val temp: F[Int => Int] = f1.map(plus.curried)
@@ -29,30 +29,30 @@ object ToolBox {
 
     // Apply[F].apply2(f1, f2)(plus)
 
-    (f1 |@| f2)(_ + _) // |@| from applicative builder
+    (f1 |@| f2) (_ + _) // |@| from applicative builder
   }
 
-  def plusOperation2[F[_]: Applicative](f1: F[Int], f2: Int): F[Int] =
-    //(f1 |@| Applicative[F].point(f2))(plus)
-    (f1 |@| f2.point[F])(plus)
+  def plusOperation2[F[_] : Applicative](f1: F[Int], f2: Int): F[Int] =
+  //(f1 |@| Applicative[F].point(f2))(plus)
+    (f1 |@| f2.point[F]) (plus)
 
-  def plusOperation3[F[_]: Applicative](seed: String, f1: F[Int], f2: String => F[Int]): F[Int] =
-    //(f1 |@| Applicative[F].point(f2))(plus)
-    (f1 |@| f2(seed))(plus)
+  def plusOperation3[F[_] : Applicative](seed: String, f1: F[Int], f2: String => F[Int]): F[Int] =
+  //(f1 |@| Applicative[F].point(f2))(plus)
+    (f1 |@| f2(seed)) (plus)
 
-  def plusOperation4[F[_]: Bind](seed: F[String], f1: F[Int], f2: String => F[Int]): F[Int] =
-    //(f1 |@| Bind[F].bind(seed)(f2))(plus)
-    //(f1 |@| seed.bind(f2))(plus)
-    (f1 |@| (seed >>= f2))(plus)
+  def plusOperation4[F[_] : Bind](seed: F[String], f1: F[Int], f2: String => F[Int]): F[Int] =
+  //(f1 |@| Bind[F].bind(seed)(f2))(plus)
+  //(f1 |@| seed.bind(f2))(plus)
+    (f1 |@| (seed >>= f2)) (plus)
 
-  def plusOperation5[F[_]: Bind](seed: F[String], f1: F[Int], f2: String => F[Int]): F[Int] =
+  def plusOperation5[F[_] : Bind](seed: F[String], f1: F[Int], f2: String => F[Int]): F[Int] =
     seed >>= (s =>
       (f1 >>= (a =>
         f2(s).map(b =>
           plus(a, b)))))
 
   // bind Operator >>= in scalaz has alias of flatMap
-  def plusOperation6[F[_]: Bind](seed: F[String], f1: F[Int], f2: String => F[Int]): F[Int] =
+  def plusOperation6[F[_] : Bind](seed: F[String], f1: F[Int], f2: String => F[Int]): F[Int] =
     for {
       s <- seed
       a <- f1
@@ -69,9 +69,13 @@ object ToolBox {
 
   def sum[A: Monoid](list: List[A]): A = list.fold(Monoid[A].zero)(_ |+| _)
 
-  def sum[F[_]: Foldable, A: Monoid](f: F[A]): A = f.fold
+  def sum[F[_] : Foldable, A: Monoid](f: F[A]): A = f.fold
 
-  val prblm1: Task[Task[Int]] = Task.delay { Task.delay { 10 } }
+  val prblm1: Task[Task[Int]] = Task.delay {
+    Task.delay {
+      10
+    }
+  }
 
   val solution1: Task[Int] = prblm1.join
 

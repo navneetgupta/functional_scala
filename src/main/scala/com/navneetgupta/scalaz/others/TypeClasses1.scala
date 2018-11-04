@@ -34,6 +34,7 @@ object TypeClasses1 extends App {
   implicit val UserShow2: Show[User] = new Show[User] {
     def show(user: User): String = user.firstName + " " + user.lastName
   }
+
   def hello4[A](a: A)(implicit sh: Show[A]): String = "Hi " + sh.show(a)
 
   println(hello4(new User("Navneet", "Gupta"))) // Hi Navneet Gupta

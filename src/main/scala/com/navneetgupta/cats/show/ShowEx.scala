@@ -6,24 +6,24 @@ import com.navneetgupta.common._
 object CustomShowInstances {
 
   /**
-   * Show is Cats’ mechanism for producing developer-friendly console output without using toString.
-   */
+    * Show is Cats’ mechanism for producing developer-friendly console output without using toString.
+    */
 
   /**
-   * Type Class For Show is as follow:
-   *
-   *   trait Show[A] {
-   *     def show(value: A): String
-   *   }
-   */
+    * Type Class For Show is as follow:
+    *
+    * trait Show[A] {
+    * def show(value: A): String
+    * }
+    */
 
   /**
-   * For Using any TypeClass we need instances for types for whihc we need to use the typeClass.
-   *
-   * Most of Instances defined in cats.implicts._ packet.
-   * So we will import for Int
-   * and define one custome instance for Student and Order
-   */
+    * For Using any TypeClass we need instances for types for whihc we need to use the typeClass.
+    *
+    * Most of Instances defined in cats.implicts._ packet.
+    * So we will import for Int
+    * and define one custome instance for Student and Order
+    */
 
   // Type Class Instance For Int ALready defined in package `cats.instances.int` so importing as it
   import cats.instances.int
@@ -39,14 +39,17 @@ object CustomShowInstances {
 }
 
 object ShowEx extends App {
+
   import cats.instances.int._ // for int implicit already defined
   import cats.instances.option._ // provided for Option Type Option Type will work only if Option[A] A's Implicit is present already.
   // Like suppose we try to use Option[Employee] this should not work since we donot have implict of Employee
   //Similarly for List Also we have instances
   import cats.instances.list._
+
   /**
-   * Uses Using Scala implicitly
-   */
+    * Uses Using Scala implicitly
+    */
+
   import CustomShowInstances._
 
   val intAsString: String = implicitly[Show[Int]].show(1)
@@ -77,6 +80,7 @@ object ShowEx extends App {
 }
 
 object ShowEx1 extends App {
+
   import cats.instances.int._
   import cats.instances.option._ // provided for Option Type Option Type will work only if Option[A] A's Implicit is present already.
   // Like suppose we try to use Option[Employee] this should not work since we donot have implict of Employee
@@ -84,8 +88,8 @@ object ShowEx1 extends App {
   import cats.instances.list._
 
   /**
-   * Uses Interface methods provided by Show
-   */
+    * Uses Interface methods provided by Show
+    */
   val showInt: Show[Int] = Show.apply[Int]
 
   val intAsString: String = showInt.show(1)
@@ -122,6 +126,7 @@ object ShowEx1 extends App {
 }
 
 object ShowEx2 extends App {
+
   import cats.instances.int._
   import cats.syntax.show._
   import cats.instances.option._ // provided for Option Type Option Type will work only if Option[A] A's Implicit is present already.
@@ -130,10 +135,11 @@ object ShowEx2 extends App {
   import cats.instances.list._
 
   /**
-   * Uses Interface Syntaxes provided by imports cats.syntax.show._
-   */
+    * Uses Interface Syntaxes provided by imports cats.syntax.show._
+    */
 
   val intAsString: String = 1.show
+
   import CustomShowInstances._
 
   val orderAsString: String = Order(23.2323, 34343.232).show

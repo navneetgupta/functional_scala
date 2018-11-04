@@ -12,8 +12,8 @@ object Exercise extends App {
   }
 
   def merge2[A, B: Monoid](
-    m1: Map[A, B],
-    m2: Map[A, B]): Map[A, B] = {
+                            m1: Map[A, B],
+                            m2: Map[A, B]): Map[A, B] = {
     val keys = m1.keys ++ m2.keys
     val zero = Monoid[B].zero
 

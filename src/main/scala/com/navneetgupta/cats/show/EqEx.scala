@@ -4,26 +4,28 @@ import cats.Eq
 import com.navneetgupta.common._
 
 object CustomEqInstances {
+
   import cats.instances.int._
   import cats.instances.double._
   import cats.syntax.eq._
+
   /**
-   * Eq is designed to support type-safe equality and address annoyances using Scala’s built-in == operator.
-   *
-   * == works for any pair of objects, no ma􏰀er what types we compare.
-   *
-   * Eq is designed to add some type safety to equality checks and work around this problem
-   *
-   * trait Eq[A] {
-   *     def eqv(a: A, b: A): Boolean
-   *     //other concrete methods based on eqv...
-   * }
-   *
-   * The interface syntax, defined in cats.syntax.eq, provides two methods for performing equality
-   * checks provided there is an instance Eq[A] in scope:
-   *     • === compares two objects for equality;
-   *     • =!= compares two objects for inequality.
-   */
+    * Eq is designed to support type-safe equality and address annoyances using Scala’s built-in == operator.
+    *
+    * == works for any pair of objects, no ma􏰀er what types we compare.
+    *
+    * Eq is designed to add some type safety to equality checks and work around this problem
+    *
+    * trait Eq[A] {
+    * def eqv(a: A, b: A): Boolean
+    * //other concrete methods based on eqv...
+    * }
+    *
+    * The interface syntax, defined in cats.syntax.eq, provides two methods for performing equality
+    * checks provided there is an instance Eq[A] in scope:
+    * • === compares two objects for equality;
+    * • =!= compares two objects for inequality.
+    */
 
   implicit val studentEq: Eq[Student] = Eq.instance[Student] { (s1, s2) =>
     s1.id === s2.id
@@ -69,9 +71,11 @@ object Data {
 }
 
 object CustomEqInstances2 {
+
   import cats.instances.int._
   import cats.instances.double._
   import cats.syntax.eq._
+
   implicit val studentEq2: Eq[Student] = new Eq[Student] {
     def eqv(s1: Student, s2: Student): Boolean = s1.id === s2.id
   }
@@ -145,6 +149,7 @@ object EqEx extends App {
 }
 
 object EqEx_ extends App {
+
   import cats.instances.int._
   import cats.instances.option._
   import cats.instances.list._
@@ -180,6 +185,7 @@ object EqEx_ extends App {
 }
 
 object EqEx1 extends App {
+
   import cats.instances.int._
   import cats.instances.option._
   import cats.instances.list._
@@ -230,7 +236,9 @@ object EqEx1 extends App {
   println(orderLSame2)
 
 }
+
 object EqEx1_ extends App {
+
   import cats.instances.int._
   import cats.instances.option._
   import cats.instances.list._
@@ -264,7 +272,9 @@ object EqEx1_ extends App {
   println(orderLSame)
   println(orderLSame2)
 }
+
 object EqEx2 extends App {
+
   import cats.instances.int._
   import cats.syntax.eq._
   import cats.instances.option._
@@ -321,6 +331,7 @@ object EqEx2 extends App {
 }
 
 object EqEx2_ extends App {
+
   import cats.instances.int._
   import cats.instances.option._
   import cats.instances.list._

@@ -3,6 +3,7 @@ package com.navneetgupta.scalaz.others
 import scalaz._, Scalaz._
 
 object StateEx2 {
+
   case class User(id: Int, firstName: String, lastName: String)
 
   case class Cache(map: Map[Int, User] = Map(), hits: Int = 0, misses: Int = 0)
@@ -33,4 +34,5 @@ object StateEx2 {
       mu.cata(u => (nc1, u.right), Repository.find(id)(nc1)) // what if we replace nc1 with c,
     }
   }
+
 }
