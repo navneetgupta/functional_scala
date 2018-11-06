@@ -87,7 +87,7 @@ object CanTruthyApp2 extends App {
   println(0.truthy)
   println(0.some.truthy)
   println(10.some.truthy)
-  println(-11.some.truthy)
+  println((-11).some.truthy)
   println(List(1, 2, 3, 4).truthy)
   println(Nil.truthy)
   println(false.truthy)

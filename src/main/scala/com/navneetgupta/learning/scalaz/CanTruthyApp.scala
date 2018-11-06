@@ -51,7 +51,7 @@ object CanTruthyApp extends App {
   println(0.truthys)
   println(0.some.truthys)
   println(10.some.truthys)
-  println(-11.some.truthys)
+  println((-11).some.truthys)
   println(List(1, 2, 3, 4).truthys)
   println((Nil: List[String]).truthys)
   println(false.truthys)
