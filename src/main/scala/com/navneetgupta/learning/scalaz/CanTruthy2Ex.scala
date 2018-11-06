@@ -1,6 +1,6 @@
 package com.navneetgupta.learning.scalaz
 
-import scalaz._, Scalaz._
+import scalaz.Scalaz._
 
 object CanTruthy2Ex extends App {
 
@@ -24,16 +24,38 @@ object CanTruthy2Ex extends App {
     final def truthy: Boolean = F.truthys(self)
   }
 
+  implicit def listCanTruthy[A]: CanTruthy2[List[A]] = CanTruthy2.truthys({
+    case Nil => false
+    case _ => true
+  })
+
+  import ToCanIsTruthy2Ops._
+
+  implicit val intCanTruthy: CanTruthy2[Int] = CanTruthy2.truthys({
+    case 0 => false
+    case _ => true
+  })
+
+  implicit def optionCanTruthy[A]: CanTruthy2[Option[A]] = CanTruthy2.truthys({
+    case None => false
+    case Some(0) => false // depending on what is required it can be changed, Here Assuming that even a zero value wrapped in Option should return false
+    case _ => true
+  })
+
+  implicit val booleanCanTruthy: CanTruthy2[Boolean] = CanTruthy2.truthys(identity)
+
+  implicit val nilCanTruthy: CanTruthy2[scala.collection.immutable.Nil.type] = CanTruthy2.truthys(_ => false)
+
   /**
-   * warning: implicit conversion method toCanIsTruthyOps should be enabled
-   * by making the implicit value scala.language.implicitConversions visible.
-   * This can be achieved by adding the import clause 'import scala.language.implicitConversions'
-   * or by setting the compiler option -language:implicitConversions.
-   * See the Scaladoc for value scala.language.implicitConversions for a discussion
-   * why the feature should be explicitly enabled.
-   *
-   * implicit def toCanIsTruthyOps[A](v: A)(implicit ev: CanTruthy[A]) = new CanTruthyOps[A] {
-   */
+    * warning: implicit conversion method toCanIsTruthyOps should be enabled
+    * by making the implicit value scala.language.implicitConversions visible.
+    * This can be achieved by adding the import clause 'import scala.language.implicitConversions'
+    * or by setting the compiler option -language:implicitConversions.
+    * See the Scaladoc for value scala.language.implicitConversions for a discussion
+    * why the feature should be explicitly enabled.
+    *
+    * implicit def toCanIsTruthyOps[A](v: A)(implicit ev: CanTruthy[A]) = new CanTruthyOps[A] {
+    */
   object ToCanIsTruthy2Ops {
     implicit def toCanIsTruthy2Ops[A](v: A)(implicit ev: CanTruthy2[A]) =
       new CanTruthy2Ops[A] {
@@ -42,29 +64,6 @@ object CanTruthy2Ex extends App {
         override implicit def F: CanTruthy2[A] = ev
       }
   }
-
-  import CanTruthy2._
-  import ToCanIsTruthy2Ops._
-
-  implicit val intCanTruthy: CanTruthy2[Int] = CanTruthy2.truthys({
-    case 0 => false
-    case _ => true
-  })
-
-  implicit def listCanTruthy[A]: CanTruthy2[List[A]] = CanTruthy2.truthys({
-    case Nil => false
-    case _   => true
-  })
-
-  implicit val booleanCanTruthy: CanTruthy2[Boolean] = CanTruthy2.truthys(identity)
-
-  implicit val nilCanTruthy: CanTruthy2[scala.collection.immutable.Nil.type] = CanTruthy2.truthys(_ => false)
-
-  implicit def optionCanTruthy[A]: CanTruthy2[Option[A]] = CanTruthy2.truthys({
-    case None    => false
-    case Some(0) => false // depending on what is required it can be changed, Here Assuming that even a zero value wrapped in Option should return false
-    case _       => true
-  })
 
   println(1.some.truthy)
   println(1.truthy)
@@ -78,24 +77,34 @@ object CanTruthy2Ex extends App {
 }
 
 object App23 {
-  trait CanTruthy[A] { self =>
+
+  trait CanTruthy[A] {
+    self =>
     def truthys(a: A): Boolean
   }
+
+  trait CanTruthyOps[A] {
+    def self: A
+
+    implicit def F: CanTruthy[A]
+
+    final def truthy: Boolean = F.truthys(self)
+  }
+
   object CanTruthy {
     def apply[A](implicit ev: CanTruthy[A]): CanTruthy[A] = ev
+
     def truthys[A](f: A => Boolean): CanTruthy[A] = new CanTruthy[A] {
       def truthys(a: A): Boolean = f(a)
     }
   }
-  trait CanTruthyOps[A] {
-    def self: A
-    implicit def F: CanTruthy[A]
-    final def truthy: Boolean = F.truthys(self)
-  }
+
   object ToCanIsTruthyOps {
     implicit def toCanIsTruthyOps[A](v: A)(implicit ev: CanTruthy[A]) = new CanTruthyOps[A] {
       def self = v
+
       implicit def F: CanTruthy[A] = ev
     }
   }
+
 }

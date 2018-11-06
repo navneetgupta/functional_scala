@@ -1,6 +1,6 @@
 package com.navneetgupta.learning.scalaz
 
-import scalaz._, Scalaz._
+import scalaz.Scalaz._
 
 object CanTruthyApp extends App {
 
@@ -30,7 +30,7 @@ object CanTruthyApp extends App {
   implicit def listCanTruthy[A]: CanTruthy[List[A]] = new CanTruthy[List[A]] {
     def truthys(a: List[A]): Boolean = a match {
       case Nil => false
-      case _   => true
+      case _ => true
     }
   }
 
@@ -40,9 +40,9 @@ object CanTruthyApp extends App {
 
   implicit def optionCanTruthy[A]: CanTruthy[Option[A]] = new CanTruthy[Option[A]] {
     def truthys(a: Option[A]): Boolean = a match {
-      case None    => false
+      case None => false
       case Some(0) => false // depending on what is required it can be changed, Here Assuming that even a zero value wrapped in Option should return false
-      case _       => true
+      case _ => true
     }
   }
 

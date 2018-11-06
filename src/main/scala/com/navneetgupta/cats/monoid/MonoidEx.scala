@@ -1,7 +1,7 @@
 package com.navneetgupta.cats.monoid
 
-import com.navneetgupta.common._
 import cats.Monoid
+import com.navneetgupta.common._
 
 /**
   * Formally, a monoid for a type A is:
@@ -40,9 +40,8 @@ object MonoidEx extends App {
 
   import CustomMonoidInstances._
   import Data._
-
-  import cats.instances.option._
   import cats.instances.list._
+  import cats.instances.option._
 
   val orderMonoidValue = implicitly[Monoid[Order]].combine(o1, o2)
   val orderOMonoidValue = implicitly[Monoid[Option[Order]]].combine(Some(o1), Some(o2))
@@ -58,14 +57,13 @@ object MonoidEx2 extends App {
 
   import CustomMonoidInstances._
   import Data._
-
-  import cats.instances.option._
   import cats.instances.list._
+  import cats.instances.option._
 
-  val orderMonoidValue = Monoid.apply[Order].combine(o1, o2)
-  val orderOMonoidValue = Monoid.apply[Option[Order]].combine(Some(o1), Some(o2))
-  val orderOMonoidValue2 = Monoid.apply[Option[Order]].combine(Some(o1), None)
-  val orderLMonoidValue = Monoid.apply[List[Order]].combine(List(o1), List(o2))
+  val orderMonoidValue = Monoid[Order].combine(o1, o2)
+  val orderOMonoidValue = Monoid[Option[Order]].combine(Some(o1), Some(o2))
+  val orderOMonoidValue2 = Monoid[Option[Order]].combine(Some(o1), None)
+  val orderLMonoidValue = Monoid[List[Order]].combine(List(o1), List(o2))
   println(orderMonoidValue)
   println(orderOMonoidValue)
   println(orderOMonoidValue2)
@@ -76,9 +74,8 @@ object MonoidEx3 extends App {
 
   import CustomMonoidInstances._
   import Data._
-
-  import cats.instances.option._
   import cats.instances.list._
+  import cats.instances.option._
   import cats.syntax.monoid._
 
   val orderMonoidValue = o1.combine(o2)

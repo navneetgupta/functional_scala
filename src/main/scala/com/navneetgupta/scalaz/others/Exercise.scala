@@ -1,8 +1,11 @@
 package com.navneetgupta.scalaz.others
 
-import scalaz._, Scalaz._
+import scalaz.Scalaz._
+import scalaz._
 
 object Exercise extends App {
+
+  // Noraml Merge
   def merge(m1: Map[String, Int], m2: Map[String, Int]): Map[String, Int] = {
     val keys = m1.keys ++ m2.keys
     val kys = keys.map {
@@ -11,6 +14,7 @@ object Exercise extends App {
     Map[String, Int](kys.toSeq: _*)
   }
 
+  // Abstracted Merge
   def merge2[A, B: Monoid](
                             m1: Map[A, B],
                             m2: Map[A, B]): Map[A, B] = {

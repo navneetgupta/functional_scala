@@ -1,7 +1,9 @@
 package com.navneetgupta.scalaz.others
 
-import scalaz._, Scalaz._
+import scalaz.Scalaz._
+import scalaz._
 
+// Second Attempt for StateEx
 object StateEx2 {
 
   case class User(id: Int, firstName: String, lastName: String)
