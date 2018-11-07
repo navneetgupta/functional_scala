@@ -4,11 +4,7 @@ import scalaz.Scalaz._
 import scalaz._
 
 object FucntorEx extends App {
-  val v1: CMayBe[Int] = CJust(10)
-  val liftedCMayBe: (CMayBe[Int] => CMayBe[Int]) = Functor[CMayBe].lift {
-    (_: Int) * 2
-  } // a function from one Functor to another F[A] => F[B]
-  val a = ((x: Int) => x + 1) map (_ * 7)
+
 
   implicit val cMayBeFunctor: Functor[CMayBe] = new Functor[CMayBe] {
     def map[A, B](fa: CMayBe[A])(f: A => B): CMayBe[B] = fa match {
@@ -16,6 +12,15 @@ object FucntorEx extends App {
       case CJust(x) => CJust(f(x))
     }
   }
+
+  val v1: CMayBe[Int] = CJust(10)
+  val liftedCMayBe: (CMayBe[Int] => CMayBe[Int]) = Functor[CMayBe].lift {
+    (_: Int) * 2
+  }
+
+  // a function from one Functor to another F[A] => F[B]
+  val a = ((x: Int) => x + 1) map (_ * 7)
+
 
   //  Functor typeclass, which is basically for things that can be mapped over.
   sealed trait CMayBe[+A]

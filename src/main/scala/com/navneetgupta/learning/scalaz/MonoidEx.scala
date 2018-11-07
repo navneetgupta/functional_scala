@@ -73,4 +73,64 @@ object MonoidEx extends App {
   assert((lengthCompare("zen", "ants")) == Ordering.LT)
   assert((lengthCompare("zen", "ant")) == Ordering.GT)
 
+  /**
+    *
+    * Functor Laws:
+    *   1.  mapping id function over a functor F gives back the same Functor F
+    *
+    * assert((List(1, 2, 3) map {identity} )== List(1, 2, 3))
+    *   2.  compose two function `f` and `g` and then map over a functor is same as first mapping `f` over Functor then again mapping second function
+    * `g` over the functor from result of first mapping.
+    *
+    *
+    * assert(
+    * (List(1, 2, 3)
+    * .map { // f compose g
+    * {(_: Int) * 3}
+    * map {(_: Int) + 1}
+    * }) == (List(1, 2, 3) map {(_: Int) * 3} map {(_: Int) + 1}))
+    *
+    **/
+
+  /*trait FunctorLaw1 {
+    /** The identity function, lifted, is a no-op. */
+    def identity[A](fa: F[A])(implicit FA: Equal[F[A]]): Boolean = FA.equal(map(fa)(x => x), fa)
+
+    /**
+      * A series of maps may be freely rewritten as a single map on a
+      * composed function.
+      */
+    def associative[A, B, C](fa: F[A], f1: A => B, f2: B => C)(implicit FC: Equal[F[C]]): Boolean = FC.equal(map(map(fa)(f1))(f2), map(fa)(f2 compose f1))
+  }*/
+
+  // Option as Monoid.
+
+  implicit def optionMonoid1[A: Semigroup]: Monoid[Option[A]] = new Monoid[Option[A]] {
+    override def append(f1: Option[A], f2: => Option[A]): Option[A] = {
+      (f1, f2) match {
+        case (Some(a1), Some(a2)) => Semigroup[A].append(a1, a2).some
+        case (Some(a1), None) => f1
+        case (None, Some(a2)) => f2
+        case _ => None
+      }
+    }
+
+    override def zero: Option[A] = None
+  }
+
+  // Above works only if A works as Monoid to use mappend on the A,
+  // But if we don’t know if the contents are monoids, we can’t use mappend between them, so what are we to do?
+  // Well, one thing we can do is to just discard the second value and keep the first one. For this, the First a type exists.
+  // Haskell is using newtype to implement First type constructor. Scalaz 7 does it using mightly Tagged type:
+
+
+  assert((Tags.First('a'.some) |+| Tags.First('b'.some)) == Tags.First('a'.some))
+  assert((Tags.First('a'.some) |+| Tags.First(none: Option[Char])) == Tags.First('a'.some))
+  assert((Tags.First(none: Option[Char]) |+| Tags.First('b'.some)) == Tags.First('b'.some))
+
+  // If we want to keep second parameter we can use Last a type.
+
+  assert((Tags.Last('a'.some) |+| Tags.Last('b'.some)) == Tags.Last('b'.some))
+  assert((Tags.Last('a'.some) |+| Tags.Last(none: Option[Char])) == Tags.Last('a'.some))
+  assert((Tags.Last(none: Option[Char]) |+| Tags.Last('b'.some)) == Tags.Last('b'.some))
 }
