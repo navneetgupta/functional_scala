@@ -17,35 +17,35 @@ object CanTruthyApp2 extends App {
     *     def apply[A](implicit instance: CanTruthy[A]): CanTruthy[A] = instance
     *
     *     def truthys[A](f: A => Boolean): CanTruthy2[A] = new CanTruthy2[A] {
-    *     override def truthys(a: A): Boolean = f(a)
-    * }
+    *       override def truthys(a: A): Boolean = f(a)
+    *     }
     *
-    * trait Ops[A] {
-    * def typeClassInstance: CanTruthy[A]
-    * def self: A
-    * final def truthy: Boolean = typeClassInstance.truthys(self)
-    * }
+    *     trait Ops[A] {
+    *         def typeClassInstance: CanTruthy[A]
+    *         def self: A
+    *         final def truthy: Boolean = typeClassInstance.truthys(self)
+    *     }
     *
-    * trait ToCanTruthyOps {
-    * implicit def toCanTruthyOps[A](v: A)(implicit ev: CanTruthy[A]): Ops[A] = new Ops[A] {
-    * val self = v
-    * val typeClassInstance = tc
-    * }
-    * }
+    *     trait ToCanTruthyOps {
+    *         implicit def toCanTruthyOps[A](v: A)(implicit ev: CanTruthy[A]): Ops[A] = new Ops[A] {
+    *             val self = v
+    *             val typeClassInstance = tc
+    *         }
+    *     }
     *
-    * object nonInheritedOps extends ToCanTruthyOps
+    *     object nonInheritedOps extends ToCanTruthyOps
     *
-    * trait AllOps[A] extends Ops[A] {
-    * def typeClassInstance: CanTruthy[A]
-    * }
+    *     trait AllOps[A] extends Ops[A] {
+    *         def typeClassInstance: CanTruthy[A]
+    *     }
     *
     *
-    * object ops {
-    * implicit def toAllCanTruthyOps[A](target: A)(implicit tc: CanTruthy[A]): AllOps[A] = new AllOps[A] {
-    * val self = target
-    * val typeClassInstance = tc
-    * }
-    * }
+    *     object ops {
+    *         implicit def toAllCanTruthyOps[A](target: A)(implicit tc: CanTruthy[A]): AllOps[A] = new AllOps[A] {
+    *             val self = target
+    *             val typeClassInstance = tc
+    *         }
+    *     }
     * }
     *
     */
