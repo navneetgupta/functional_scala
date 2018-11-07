@@ -14,10 +14,10 @@ object CanTruthyApp2 extends App {
     * Underneath for above @typeclass and @op definition `simulacrum` will define below boilerplate lines of code as following
     *
     * object CanTruthy {
-    * def apply[A](implicit instance: CanTruthy[A]): CanTruthy[A] = instance
+    *     def apply[A](implicit instance: CanTruthy[A]): CanTruthy[A] = instance
     *
-    * def truthys[A](f: A => Boolean): CanTruthy2[A] = new CanTruthy2[A] {
-    * override def truthys(a: A): Boolean = f(a)
+    *     def truthys[A](f: A => Boolean): CanTruthy2[A] = new CanTruthy2[A] {
+    *     override def truthys(a: A): Boolean = f(a)
     * }
     *
     * trait Ops[A] {
