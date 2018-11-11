@@ -21,7 +21,7 @@ object FoldMapEx extends App {
 
   assert((List(true, false, true, true) foldMap {
     Tags.Disjunction.apply
-  }) == Tags.Disjunction(true))   
+  }) == Tags.Disjunction(true))
 
 
 }

@@ -1,6 +1,6 @@
 package com.navneetgupta.learning.scalaz
 
-import org.scalatest.Assertions._
+//import org.scalatest.Assertions._
 import scalaz.Scalaz._
 import scalaz._
 
