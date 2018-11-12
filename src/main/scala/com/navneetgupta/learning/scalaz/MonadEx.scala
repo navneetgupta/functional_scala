@@ -164,5 +164,5 @@ object MonadEx extends App {
     * Left Identity: (Monad[F].point(x) flatMap {f}) assert_=== f(x)
     * Right Identity: (m forMap {Monad[F].point(_)}) assert_=== m
     * Associativity: (m flatMap f) flatMap g assert_=== m flatMap { x => f(x) flatMap {g} }
-    * */
+    **/
 }
