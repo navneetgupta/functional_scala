@@ -5,7 +5,6 @@ import scalaz._
 
 object FucntorEx extends App {
 
-
   implicit val cMayBeFunctor: Functor[CMayBe] = new Functor[CMayBe] {
     def map[A, B](fa: CMayBe[A])(f: A => B): CMayBe[B] = fa match {
       case CNothing => CNothing
@@ -72,5 +71,7 @@ object FucntorEx extends App {
   println(List(1, 2, 3).strengthL("x"))
   println(List(1, 2, 3).strengthR("x"))
   println(List(1, 2, 3).void)
-
+  println("event 1 ok".right.isRight)
+  println("event 1 ok".right.isLeft)
+  println("event 1 ok".right | "Something Bad") // GetOrElse
 }
