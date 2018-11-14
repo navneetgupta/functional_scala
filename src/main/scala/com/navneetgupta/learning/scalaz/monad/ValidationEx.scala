@@ -26,6 +26,5 @@ object ValidationEx extends App {
   println(("event 1 ok".successNel[String] |@| "event 2 failed!".failureNel[String] |@| "event 3 failed!".failureNel[String]) {_ + _ + _})
 
   println(1.wrapNel)
-  
 
 }
