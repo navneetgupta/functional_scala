@@ -33,6 +33,7 @@ libraryDependencies ++= {
     "org.typelevel" %% "cats-effect" % "1.0.0-RC2",
     "org.typelevel" %% "kittens" % "1.1.1",
     "com.github.mpilquist" %% "simulacrum" % "0.14.0",
-    "org.scalatest" %% "scalatest" % "3.0.5"
+    "org.scalatest" %% "scalatest" % "3.0.5",
+    "com.chuusai" %% "shapeless" % "2.3.3"
 	)
 }
