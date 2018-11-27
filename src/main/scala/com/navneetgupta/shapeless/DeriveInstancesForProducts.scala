@@ -4,25 +4,7 @@ import com.navneetgupta.shapeless.AutoTypeClassInstancesEx.IceCream
 import shapeless.{::, Generic, HList, HNil}
 
 object DeriveInstancesForProducts  extends App {
-  trait CsvEncoder[A] {
-    def encode(a: A) : List[String]
-  }
-
-  object CsvEncoder {
-    def createEncoder[A](f: A => List[String]): CsvEncoder[A] = new CsvEncoder[A] {
-      override def encode(a: A): List[String] = f(a)
-    }
-  }
-
-  implicit val stringEncoder: CsvEncoder[String] = CsvEncoder.createEncoder[String](_ :: Nil)
-
-  implicit val intEncoder: CsvEncoder[Int] = CsvEncoder.createEncoder[Int](_.toString :: Nil)
-
-  implicit val booleanEncoder: CsvEncoder[Boolean] = CsvEncoder.createEncoder[Boolean](_.toString :: Nil)
-
-  def writeCSV[A](values: List[A])(implicit enc: CsvEncoder[A]): String =
-    values.map( value => enc.encode(value).mkString(",")).mkString("\n")
-
+  import CsvEncoderInstances._
 
   implicit val hnilEncoder: CsvEncoder[HNil] = CsvEncoder.createEncoder(hnil => Nil)
 
@@ -36,8 +18,6 @@ object DeriveInstancesForProducts  extends App {
   val reprEncoder: CsvEncoder[String :: Int :: Boolean :: HNil] = implicitly
 
   println(reprEncoder.encode("abc" :: 123  :: false :: HNil))
-
-
 
 //  implicit val iceCreamEncoder: CsvEncoder[IceCream] = {
 //    val gen = Generic[IceCream]
@@ -65,12 +45,13 @@ object DeriveInstancesForProducts  extends App {
                                     enc : CsvEncoder[R]
                                    ): CsvEncoder[A] = CsvEncoder.createEncoder(a => enc.encode(gen.to(a)))
 
+
+
   val iceCreams: List[IceCream] = List(
     IceCream("Sundae", 1, false),
     IceCream("Cornetto", 0, true),
     IceCream("Banana Split", 0, false)
   )
-
   println(writeCSV(iceCreams)(
     genericEncoder(
       Generic[IceCream],
@@ -81,5 +62,5 @@ object DeriveInstancesForProducts  extends App {
 
   println("TEsting")
 
-//  implicit
+
 }

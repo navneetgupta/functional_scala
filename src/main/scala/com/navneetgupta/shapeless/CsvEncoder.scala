@@ -1,5 +1,6 @@
 package com.navneetgupta.shapeless
 
+
 trait CsvEncoder[A] {
   def encode(a: A) : List[String]
 }
@@ -11,11 +12,13 @@ object CsvEncoder {
 }
 
 object CsvEncoderInstances {
-  implicit val stringEncoder: CsvEncoder[String] = CsvEncoder.createEncoder[String](_ :: Nil)
+  import CsvEncoder._
 
-  implicit val intEncoder: CsvEncoder[Int] = CsvEncoder.createEncoder[Int](_.toString :: Nil)
+  implicit val stringEncoder: CsvEncoder[String] = createEncoder[String](_ :: Nil)
 
-  implicit val booleanEncoder: CsvEncoder[Boolean] = CsvEncoder.createEncoder[Boolean](_.toString :: Nil)
+  implicit val intEncoder: CsvEncoder[Int] = createEncoder[Int](_.toString :: Nil)
+
+  implicit val booleanEncoder: CsvEncoder[Boolean] = createEncoder[Boolean](_.toString :: Nil)
 
   def writeCSV[A](values: List[A])(implicit enc: CsvEncoder[A]): String =
     values.map( value => enc.encode(value).mkString(",")).mkString("\n")
