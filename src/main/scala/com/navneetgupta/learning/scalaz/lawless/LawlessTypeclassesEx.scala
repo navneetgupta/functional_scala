@@ -5,13 +5,20 @@ import scalaz._, Scalaz._
 object LawlessTypeclassesEx extends App {
 
   //Length
-
+  /**
+    * trait Length[F[_]] { self =>
+    *   def length[A](fa: F[A]): Int
+    * }
+    * */
 
   // Index
 
   // noraml scala
 //  println(List(1,2,3)(3)) // java.lang.IndexOutOfBoundsException: 3
   println(List(1,2,3) index 3) // None
+  println(List(1,2,3) index 2) // Some(3)
+  println(List(1,2,3) index 1) // Some(2)
+  println(List(1,2,3) index 0) // Some(1)
 
 
   // This way, we can both perform IO and update state in the same game loop.

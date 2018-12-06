@@ -52,6 +52,8 @@ object DeriveInstancesForProducts  extends App {
     IceCream("Cornetto", 0, true),
     IceCream("Banana Split", 0, false)
   )
+
+
   println(writeCSV(iceCreams)(
     genericEncoder(
       Generic[IceCream],
