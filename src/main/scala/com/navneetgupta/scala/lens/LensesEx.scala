@@ -60,6 +60,8 @@ object LensesEx extends App {
 
   println(incX(turtle1))
 
+  // LEns As State
+
   val incXState = for { // State which is  S => (S,A)
     x <- turtleX %= {
       _ + 1.23
@@ -88,9 +90,7 @@ object LensesEx extends App {
 
   println(forward(22.4)(turtle1))
 
-  println(forward(22.4) exec(turtle1))
-
-
+  println(forward(22.4) exec (turtle1))
 
 
 }
