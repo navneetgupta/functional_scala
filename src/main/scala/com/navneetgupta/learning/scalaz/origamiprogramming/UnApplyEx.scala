@@ -11,13 +11,13 @@ object UnApplyEx extends App {
     * */
 
 
-  Applicative[Function1[Int, Int]]
+  //Applicative[Function1[Int, Int]]
 
   Applicative[({type l[A]=Function1[Int, A]})#l]
 
   // This becomes annoying for M[_,_] like Validation. One of the way Scalaz helps you out is to provide meta-instances of typeclass instance called Unapply.
 
-  
+
 
 
 }
