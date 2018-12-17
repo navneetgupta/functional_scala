@@ -24,6 +24,7 @@ libraryDependencies ++= {
 		"com.typesafe.akka" %% "akka-actor" % akkaVersion,
 		"org.scalaz" %% "scalaz-core" % "7.2.26",
 		"org.scalaz" %% "scalaz-concurrent" % "7.2.26",
+    "org.scalaz" %% "scalaz-iteratee" % "7.2.26",
 		"org.typelevel" %% "cats-core" % catVersion,
     "org.typelevel" %% "cats-macros" % catVersion,
     "org.typelevel" %% "cats-kernel" % catVersion,
@@ -34,6 +35,7 @@ libraryDependencies ++= {
     "org.typelevel" %% "kittens" % "1.1.1",
     "com.github.mpilquist" %% "simulacrum" % "0.14.0",
     "org.scalatest" %% "scalatest" % "3.0.5",
-    "com.chuusai" %% "shapeless" % "2.3.3"
+    "com.chuusai" %% "shapeless" % "2.3.3",
+    "org.scalaz" %% "scalaz-zio" % "0.5.1"
 	)
 }

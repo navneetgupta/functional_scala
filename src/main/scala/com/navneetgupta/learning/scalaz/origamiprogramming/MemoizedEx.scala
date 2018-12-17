@@ -22,7 +22,7 @@ object MemoizedEx extends App {
     t1
   })
 
-  val memoizedFib: Long => Long = Memo.immutableHashMapMemo { // donot define a def instead of val it will kill the Memo purpose.
+  val memoizedFib: Long => Long = Memo.immutableHashMapMemo { // don't define a def instead of val it will kill the Memo purpose.
     case 0 => 0
     case 1 => 1
     case x1 => memoizedFib(x1-2) + memoizedFib(x1-1)

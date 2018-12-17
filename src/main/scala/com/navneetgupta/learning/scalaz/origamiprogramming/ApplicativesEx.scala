@@ -27,5 +27,7 @@ object ApplicativesEx extends  App {
     * */
 
   println(Applicative[List].compose[Option].point(1))
+
+
 }
 
