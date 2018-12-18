@@ -36,6 +36,8 @@ libraryDependencies ++= {
     "com.github.mpilquist" %% "simulacrum" % "0.14.0",
     "org.scalatest" %% "scalatest" % "3.0.5",
     "com.chuusai" %% "shapeless" % "2.3.3",
-    "org.scalaz" %% "scalaz-zio" % "0.5.1"
+    "org.scalaz" %% "scalaz-zio" % "0.5.1",
+    "org.apache.commons" % "commons-io" % "1.3.2",
+//    "org.apache.httpcomponents" % "httpcore" % "4.4.10"
 	)
 }
