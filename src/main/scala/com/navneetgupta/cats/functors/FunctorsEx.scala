@@ -2,7 +2,6 @@ package com.navneetgupta.cats.functors
 
 import cats.Functor
 import cats.implicits._
-import com.navneetgupta.common._
 
 /**
   * functors, an abstraction that allows us to represent sequences of operations within a context such as a List, an Option,
@@ -56,7 +55,19 @@ object Data {
 
   import Tree._
 
-  val t1: Tree[Int] = branch(branch(leaf(10), leaf(9)), branch(branch(branch(leaf(10), leaf(1)), leaf(3)), branch(leaf(4), branch(leaf(5), leaf(6)))))
+  val t1: Tree[Int] =
+    branch(
+      branch(leaf(10), leaf(9)),
+      branch(
+        branch(
+          branch(leaf(10), leaf(1)),
+          leaf(3)
+        ),
+        branch(leaf(4),
+          branch(leaf(5), leaf(6))
+        )
+      )
+    )
 }
 
 object FunctorsEx extends App {
