@@ -49,4 +49,14 @@ object FibersFibEx extends App {
   println(fib(7))
   println(fib(8))
 
+  //  Two IO actions can be raced, which means they will be executed in parallel, and the value of the first action that completes successfully will be returned.
+
+  println(fib(100) race fib(200))
+  //  The race combinator is resource-safe, which means that if one of the two actions returns a value, the other one will be interrupted,
+  //  to prevent wasting resources.
+
+  //  The race and even par combinators are a specialization of a much-more powerful combinator called raceWith,
+  //  which allows executing user-defined logic when the first of two actions succeeds.
+
+  //  The par combinator has resource-safe semantics. If one computation fails, the other computation will be interrupted, to prevent wasting resources.
 }
