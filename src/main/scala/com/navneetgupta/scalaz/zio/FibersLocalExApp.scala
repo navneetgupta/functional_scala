@@ -14,7 +14,7 @@ object FibersLocalExApp extends App {
   // always get value after setting it up other wise it would lead to memory leak
   // use locally instead to avoid the memory Leakage
 
-  
+
 
 
   val b = for {
