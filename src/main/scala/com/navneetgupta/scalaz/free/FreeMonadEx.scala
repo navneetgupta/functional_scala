@@ -61,4 +61,13 @@ object FreeMonadEx extends App {
       case Fix(x) => Fix[F, E2](Functor[F].map(x) {catchy(_)(f)}) case Throwy(e) => f(e)
     }
   }
+
+
+  implicit val CharToyFunctor = new Functor[CharToy] {
+    def map[A, B](fa: CharToy[A])(f: A => B) : CharToy[B] = fa match {
+      case CharOutput(a,next) => CharOutput(a, f(next))
+      case CharBell(next) => CharBell(f(next))
+      case CharDone => CharDone
+    }
+  }
 }
