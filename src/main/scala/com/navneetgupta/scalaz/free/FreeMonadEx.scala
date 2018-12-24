@@ -70,4 +70,10 @@ object FreeMonadEx extends App {
       case CharDone => CharDone
     }
   }
+
+//  our FixE already exists, too, and it’s called the Free monad:
+//  data Free f r = Free (f (Free f r)) | Pure r
+
+//  In Scalaz version, Free constructor is called Free.Suspend and Pure is called Free.Return.
+  //  Let’s re-implement CharToy commands based on Free:
 }
