@@ -18,18 +18,20 @@ object BracketsEx extends App {
 
   val z: IO[IOException, Unit] = openFile("data.json").bracket(closeFile(_)) { file =>
     for {
-      data    <- decodeData(file)
+      data <- decodeData(file)
       grouped <- groupData(data)
     } yield grouped
   }
 
 
-
   // Just for Satisfying the Types
   def openFile(fileName: String): IO[IOException, File] = ???
+
   def closeFile(file: File): IO[Nothing, Boolean] = ???
-  def decodeData(file: File) : IO[Nothing, String] = ???
-  def groupData(value: String) : IO[IOException, Unit]= ???
+
+  def decodeData(file: File): IO[Nothing, String] = ???
+
+  def groupData(value: String): IO[IOException, Unit] = ???
 
 
   // A helper method called ensuring provides a simpler analogue of finally:
@@ -43,8 +45,6 @@ object BracketsEx extends App {
   val action: IO[Throwable, String] = IO.sync(i += 1) *> IO.fail(new Throwable("Boom!"))
   val cleanupAction: IO[Nothing, Unit] = IO.sync(i -= 1)
   val composite = action.ensuring(cleanupAction)
-
-
 
 
 }

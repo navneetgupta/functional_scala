@@ -13,15 +13,15 @@ object IOMonadEx extends App {
     * typeclass contract of ST:
     *
     * sealed trait ST[S, A] {
-    *   private[effect] def apply(s: World[S]): (World[S], A)
+    * private[effect] def apply(s: World[S]): (World[S], A)
     * }
     *
     * And the following is the typeclass contract of IO:
     *
     * sealed trait IO[+A] {
-    *   private[effect] def apply(rw: World[RealWorld]): Trampoline[(World[RealWorld], A)]
+    * private[effect] def apply(rw: World[RealWorld]): Trampoline[(World[RealWorld], A)]
     * }
-    * */
+    **/
 
   val action1 = for {
     _ <- putStrLn("Hello, world!")
@@ -41,8 +41,8 @@ object IOMonadEx extends App {
   // Composing IO is done Monadically
 
   def program: IO[Unit] = for {
-    line  <- readLn
-    _     <- putStrLn(line)
+    line <- readLn
+    _ <- putStrLn(line)
   } yield ()
 
   //  IO[Unit] is an instance of Monoid, so we can re-use the monoid addition function |+|.

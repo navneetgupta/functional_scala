@@ -15,10 +15,10 @@ object FailureEx extends App {
 
   def sqrt(io: IO[Nothing, Double]): IO[String, Double] =
     IO.absolve(
-     a1(io)
+      a1(io)
     )
 
-  def a1(io: IO[Nothing, Double]) : IO[Nothing, Either[String, Double]] =
+  def a1(io: IO[Nothing, Double]): IO[Nothing, Either[String, Double]] =
     io.map(value =>
       if (value < 0.0) Left("Value must be >= 0.0")
       else Right(Math.sqrt(value))
@@ -33,7 +33,7 @@ object FailureEx extends App {
     case _: java.io.FileNotFoundException => openFile("backup.json")
   }
 
-//    You can execute one action, or, if it fails, execute another action, with the orElse combinator:
+  //    You can execute one action, or, if it fails, execute another action, with the orElse combinator:
 
   val z3: IO[IOException, Array[Byte]] = openFile("primary.json").orElse(openFile("backup.json"))
 
@@ -44,10 +44,12 @@ object FailureEx extends App {
   val z4: IO[Nothing, Content] =
     readUrls("urls.json").redeem(e => IO.point(NoContent(e)), fetchContent)
 
-  def readUrls[E,A](str: String): IO[E, A] = ???
-  def fetchContent[E,A, B](a: A): IO[E, B] = ???
+  def readUrls[E, A](str: String): IO[E, A] = ???
+
+  def fetchContent[E, A, B](a: A): IO[E, B] = ???
 
   sealed trait Content
+
   case class NoContent[A](value: A) extends Content
 
 }

@@ -14,9 +14,13 @@ object FreeMonadEx2 extends App {
   //  Let’s re-implement CharToy commands based on Free:
 
   sealed trait CharToy[+Next]
+
   object CharToy {
+
     case class CharOutput[Next](a: Char, next: Next) extends CharToy[Next]
+
     case class CharBell[Next](next: Next) extends CharToy[Next]
+
     case class CharDone() extends CharToy[Nothing]
 
     implicit val charToyFunctor: Functor[CharToy] = new Functor[CharToy] {
@@ -28,8 +32,11 @@ object FreeMonadEx2 extends App {
     }
 
     def output(a: Char): Free[CharToy, Unit] = Free.liftF(CharOutput(a, Free.point[CharToy, Unit](())))
+
     def bell: Free[CharToy, Unit] = Free.liftF(CharBell(Free.point[CharToy, Unit](())))
+
     def done: Free[CharToy, Unit] = Free.liftF[CharToy, Unit](CharDone())
+
     def pointed[A](a: A) = Free.point[CharToy, A](a)
   }
 
@@ -40,12 +47,13 @@ object FreeMonadEx2 extends App {
       case CharOutput(a, next) =>
         "output " + Show[Char].shows(a) + "\n" + showProgram(next)
       case CharBell(next) =>
-        "bell " + "\n" + showProgram(next) case CharDone() =>
+        "bell " + "\n" + showProgram(next)
+      case CharDone() =>
         "done\n"
-      },
-    {
-      r: R => "return " + Show[R].shows(r) + "\n"
-    })
+    },
+      {
+        r: R => "return " + Show[R].shows(r) + "\n"
+      })
 
   val subroutine = output('A')
 
@@ -63,8 +71,8 @@ object FreeMonadEx2 extends App {
   pretty(pointed('A') >>= output)
   pretty(output('A') >>= pointed)
 
-//  pretty((output('A') >> done) >> output('C'))
-//  pretty(output('A') >> (done >> output('C')))
+  //  pretty((output('A') >> done) >> output('C'))
+  //  pretty(output('A') >> (done >> output('C')))
 
   //  data Free f r = Free (f (Free f r)) | Pure r
   //  data List a = Cons (a (List a )) | Nil

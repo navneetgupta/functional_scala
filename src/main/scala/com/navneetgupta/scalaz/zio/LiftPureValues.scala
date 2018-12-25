@@ -6,7 +6,7 @@ import java.io.IOException
 
 import org.apache.commons.io.FileUtils
 
-object LiftPureValues extends  App {
+object LiftPureValues extends App {
   val p: IO[Nothing, String] = IO.point("Hello World!!!!")
 
   //  The constructor uses non-strict evaluation, so the parameter will not be evaluated until
@@ -30,24 +30,22 @@ object LiftPureValues extends  App {
     IO.syncException(FileUtils.readFileToByteArray(new File(name)))
 
 
-
   // To catch any Throwable
 
   def readFile2(name: String): IO[String, Array[Byte]] =
     IO.syncCatch(FileUtils.readFileToByteArray(new File(name))) {
-      case e : IOException => "Could not read file"
+      case e: IOException => "Could not read file"
     }
 
   // Use async method of IO to import effectful asynchronous code into your purely functional program:
 
-//  def makeRequest(req: Request): IO[HttpException, Response] =
-//    IO.async[HttpException, Response](cb => Http.req(req, cb))
-
+  //  def makeRequest(req: Request): IO[HttpException, Response] =
+  //    IO.async[HttpException, Response](cb => Http.req(req, cb))
 
 
   // mapping IO[E,A]  to IO[E, B]
 
-  val z1: IO[Nothing, Int] = IO.point("2323").map(_.toInt*10)
+  val z1: IO[Nothing, Int] = IO.point("2323").map(_.toInt * 10)
 
   // transfrom IO[E, A] to IO[E2, A] using leftMap
 

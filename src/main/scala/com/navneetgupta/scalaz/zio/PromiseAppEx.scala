@@ -37,5 +37,4 @@ object PromiseAppEx extends App {
   } yield ()
 
 
-
 }

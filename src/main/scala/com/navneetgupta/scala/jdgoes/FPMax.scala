@@ -37,45 +37,54 @@ object FPMax2 {
 
   trait Program[F[_]] {
     def finish[A](a: => A): F[A]
+
     def chain[A, B](fa: F[A], afb: A => F[B]): F[B]
-    def map[A,B](fa: F[A], ab: A => B): F[B]
+
+    def map[A, B](fa: F[A], ab: A => B): F[B]
   }
 
   object Program {
-    def apply[F[_]](implicit F: Program[F]): Program[F]= F
+    def apply[F[_]](implicit F: Program[F]): Program[F] = F
   }
 
   implicit class ProgramSyntax[F[_], A](fa: F[A]) {
     def map[B](ab: A => B)(implicit P: Program[F]): F[B] = P.map(fa, ab)
+
     def flatMap[B](afb: A => F[B])(implicit P: Program[F]): F[B] = P.chain(fa, afb)
   }
 
-  def finish[F[_],A](a: => A)(implicit P: Program[F]): F[A] = P.finish(a)
+  def finish[F[_], A](a: => A)(implicit P: Program[F]): F[A] = P.finish(a)
 
   trait Console[F[_]] {
     def putStrLn(line: String): F[Unit]
+
     def getStrLn(): F[String]
   }
 
   object Console {
-    def apply[F[_]](implicit F: Console[F]): Console[F]= F
+    def apply[F[_]](implicit F: Console[F]): Console[F] = F
   }
-  def putStrLn[F[_]: Console](line: String): F[Unit] = Console[F].putStrLn(line)
-  def getStrLn[F[_]: Console](): F[String] = Console[F].getStrLn()
+
+  def putStrLn[F[_] : Console](line: String): F[Unit] = Console[F].putStrLn(line)
+
+  def getStrLn[F[_] : Console](): F[String] = Console[F].getStrLn()
 
 
   trait Random[F[_]] {
     def nextInt(maxN: Int): F[Int]
   }
+
   object Random {
-    def apply[F[_]](implicit F: Random[F]): Random[F]= F
+    def apply[F[_]](implicit F: Random[F]): Random[F] = F
   }
 
-  def nextInt[F[_]: Random](maxN: Int) = Random[F].nextInt(maxN)
+  def nextInt[F[_] : Random](maxN: Int) = Random[F].nextInt(maxN)
 
-  case class IO[A](unsafeRun: () =>  A) { self =>
-    def map[B](f: A => B): IO[B] = IO( () => f(self.unsafeRun()))
-    def flatMap[B](f: A => IO[B]): IO[B] = IO( () => f(self.unsafeRun()).unsafeRun())
+  case class IO[A](unsafeRun: () => A) {
+    self =>
+    def map[B](f: A => B): IO[B] = IO(() => f(self.unsafeRun()))
+
+    def flatMap[B](f: A => IO[B]): IO[B] = IO(() => f(self.unsafeRun()).unsafeRun())
   }
 
   object IO {
@@ -83,74 +92,78 @@ object FPMax2 {
 
     implicit val ProgramIO = new Program[IO] {
       def finish[A](a: => A): IO[A] = IO.point(a)
+
       def chain[A, B](fa: IO[A], afb: A => IO[B]): IO[B] = fa.flatMap(afb)
-      def map[A,B](fa: IO[A], ab: A => B): IO[B] = fa.map(ab)
+
+      def map[A, B](fa: IO[A], ab: A => B): IO[B] = fa.map(ab)
     }
 
     implicit val ConsoleIO = new Console[IO] {
       def putStrLn(line: String): IO[Unit] = IO(() => println(line))
+
       def getStrLn(): IO[String] = IO(() => scala.io.StdIn.readLine())
     }
 
     implicit val RandomIO = new Random[IO] {
-      def nextInt(maxN: Int): IO[Int]= IO.point(scala.util.Random.nextInt())
+      def nextInt(maxN: Int): IO[Int] = IO.point(scala.util.Random.nextInt())
     }
   }
-//
-//  def putStrLn(line: String): IO[Unit] = IO(() => println(line))
-//
-//  def getStrLn(): IO[String] = IO(() => scala.io.StdIn.readLine())
-//
-//  def nextInt(maxN: Int): IO[Int] = IO.point(scala.util.Random.nextInt())
 
-  def checkContinue[F[_]: Program: Console](name: String): F[Boolean] = {
+  //
+  //  def putStrLn(line: String): IO[Unit] = IO(() => println(line))
+  //
+  //  def getStrLn(): IO[String] = IO(() => scala.io.StdIn.readLine())
+  //
+  //  def nextInt(maxN: Int): IO[Int] = IO.point(scala.util.Random.nextInt())
+
+  def checkContinue[F[_] : Program : Console](name: String): F[Boolean] = {
     for {
-      _     <- putStrLn(s"Do You Want to Contin ue Playing, Dear ${name}? ")
+      _ <- putStrLn(s"Do You Want to Contin ue Playing, Dear ${name}? ")
       input <- getStrLn().map(_.toLowerCase)
-      cont     <- input match {
-                  case "y"  => finish(true)
-                  case "n"  => finish(false)
-                  case _    => checkContinue(name)
-                }
+      cont <- input match {
+        case "y" => finish(true)
+        case "n" => finish(false)
+        case _ => checkContinue(name)
+      }
     } yield cont
   }
 
-  def gameLoop[F[_]: Program: Random: Console](name: String): F[Unit] = {
+  def gameLoop[F[_] : Program : Random : Console](name: String): F[Unit] = {
     for {
-      rand  <- nextInt(5).map(_ +1)
-      _     <- putStrLn(s"Dear ${name}, Please Guess the number from 1 to 5")
+      rand <- nextInt(5).map(_ + 1)
+      _ <- putStrLn(s"Dear ${name}, Please Guess the number from 1 to 5")
       input <- getStrLn()
-      _     <- parseInt(input).fold(
-                  putStrLn("You didn't Enter a proper number")
-                )( guess => {
-                      if (guess == rand) putStrLn(s"You Guessed Right, ${name} !")
-                      else putStrLn(s"You Guessed wrong ${name} ! The number was: ${guess}")
-                })
-      cont   <- checkContinue(name)
-      _       <- if(cont) gameLoop(name) else  finish(())
+      _ <- parseInt(input).fold(
+        putStrLn("You didn't Enter a proper number")
+      )(guess => {
+        if (guess == rand) putStrLn(s"You Guessed Right, ${name} !")
+        else putStrLn(s"You Guessed wrong ${name} ! The number was: ${guess}")
+      })
+      cont <- checkContinue(name)
+      _ <- if (cont) gameLoop(name) else finish(())
 
     } yield ()
   }
 
-  def main[F[_]: Program: Random: Console]: F[Unit] = {
+  def main[F[_] : Program : Random : Console]: F[Unit] = {
     for {
-      _     <- putStrLn("Hey There!! Want To Play the Game? Let's Start By Entering Your Name?")
-      name  <- getStrLn()
-      _     <- putStrLn(s"Hello Dear ${name}, Lets Start the Game.")
-      _     <- gameLoop(name)
-    } yield()
+      _ <- putStrLn("Hey There!! Want To Play the Game? Let's Start By Entering Your Name?")
+      name <- getStrLn()
+      _ <- putStrLn(s"Hello Dear ${name}, Lets Start the Game.")
+      _ <- gameLoop(name)
+    } yield ()
   }
 
 
-  def mainIO :IO[Unit] = main[IO]
+  def mainIO: IO[Unit] = main[IO]
 
 
-  case class TestData(input: List[String], output: List[String],nums: List[Int]) {
+  case class TestData(input: List[String], output: List[String], nums: List[Int]) {
     def putStrLn(line: String): (TestData, Unit) =
       (copy(output = line :: output), Unit)
 
     def getStrLn(): (TestData, String) =
-      (copy(input = input.drop(1)),input.head)
+      (copy(input = input.drop(1)), input.head)
 
     def nextInt(maxN: Int): (TestData, Int) =
       (copy(nums = nums.drop(1)), nums.head)
@@ -160,29 +173,38 @@ object FPMax2 {
 
   }
 
-  case class TestIO[A](run: TestData => (TestData, A)) {self =>
-    def map[B](ab: A => B): TestIO[B] = TestIO(t => self.run(t) match { case (t,a) => (t, ab(a))})
-    def flatMap[B](afb: A => TestIO[B]): TestIO[B] = TestIO(t => self.run(t) match {case (t,a) => afb(a).run(t)})
+  case class TestIO[A](run: TestData => (TestData, A)) {
+    self =>
+    def map[B](ab: A => B): TestIO[B] = TestIO(t => self.run(t) match {
+      case (t, a) => (t, ab(a))
+    })
+
+    def flatMap[B](afb: A => TestIO[B]): TestIO[B] = TestIO(t => self.run(t) match {
+      case (t, a) => afb(a).run(t)
+    })
 
     def eval(t: TestData): TestData = run(t)._1
   }
 
   object TestIO {
-    def point[A](a: => A): TestIO[A] = TestIO(t => (t,a))
+    def point[A](a: => A): TestIO[A] = TestIO(t => (t, a))
 
     implicit val ProgramTestIO = new Program[TestIO] {
       def finish[A](a: => A): TestIO[A] = TestIO.point(a)
+
       def chain[A, B](fa: TestIO[A], afb: A => TestIO[B]): TestIO[B] = fa.flatMap(afb)
-      def map[A,B](fa: TestIO[A], ab: A => B): TestIO[B] = fa.map(ab)
+
+      def map[A, B](fa: TestIO[A], ab: A => B): TestIO[B] = fa.map(ab)
     }
 
     implicit val ConsoleTestIO = new Console[TestIO] {
       def putStrLn(line: String): TestIO[Unit] = TestIO(t => t.putStrLn(line))
+
       def getStrLn(): TestIO[String] = TestIO(t => t.getStrLn())
     }
 
     implicit val RandomTestIO = new Random[TestIO] {
-      def nextInt(maxN: Int): TestIO[Int]= TestIO(t => t.nextInt(maxN))
+      def nextInt(maxN: Int): TestIO[Int] = TestIO(t => t.nextInt(maxN))
     }
   }
 
@@ -191,15 +213,16 @@ object FPMax2 {
 
   val TestExample =
     TestData(
-      input  = "John" :: "1" :: "n" :: Nil,
+      input = "John" :: "1" :: "n" :: Nil,
       output = Nil,
-      nums   = 1 :: Nil
+      nums = 1 :: Nil
     )
 
-   def runTest = mainTestIO.eval(TestExample).showResults
+  def runTest = mainTestIO.eval(TestExample).showResults
 }
 
 object TestApp extends App {
+
   import FPMax2._
 
   println(runTest)
