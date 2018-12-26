@@ -1,6 +1,6 @@
 package com.navneetgupta.scalaz.zio
 
-import scalaz.zio.{IO, Queue}
+import scalaz.zio.{IO, Queue, Promise}
 
 object QueueEx extends App {
   // Queue is a lightweight in-memory queue built on ZIO with composable and transparent back-pressure.
@@ -34,4 +34,32 @@ object QueueEx extends App {
     a <- queue.take
   } yield a
 
+  val multipleConsume: IO[Nothing, List[Int]] = for {
+    queue <- Queue.bounded[Int](100)
+    _ <- queue.offer(10)
+    _ <- queue.offer(20)
+    list  <- queue.takeUpTo(5)
+  } yield list
+
+  val takeAll: IO[Nothing, List[Int]] = for {
+    queue <- Queue.bounded[Int](100)
+    _ <- queue.offer(10)
+    _ <- queue.offer(20)
+    list  <- queue.takeAll
+  } yield list
+
+  val shuttingDown: IO[Nothing, Unit] = for {
+    queue <- Queue.bounded[Int](3)
+    f <- queue.take.fork
+    _ <- queue.shutdown // will interrupt f
+    _ <- f.join // Will terminate
+  } yield ()
+
+  val awaitShutDown: IO[Nothing, Unit] = for {
+    queue <- Queue.bounded[Int](3)
+    p <- Promise.make[Nothing, Boolean]
+    f <- queue.awaitShutdown.fork
+    _ <- queue.shutdown
+    _ <- f.join
+  } yield ()
 }

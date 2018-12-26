@@ -9,6 +9,7 @@ scalaVersion := "2.12.6"
 version      := "0.1.0"
 
 scalacOptions ++= Seq(
+  "-feature",
   "-Xfatal-warnings",
   "-Ypartial-unification",
   "-language:higherKinds",
@@ -16,6 +17,8 @@ scalacOptions ++= Seq(
 )
 
 addCompilerPlugin("org.scalamacros" % "paradise" % "2.1.0" cross CrossVersion.full)
+
+addCompilerPlugin("org.spire-math" %% "kind-projector" % "0.9.6")
 
 libraryDependencies ++= {
 	val akkaVersion = "2.5.13"
