@@ -98,5 +98,4 @@ object FreeMonadTestApp extends App {
   } yield r
 
   println(program)
-
 }
