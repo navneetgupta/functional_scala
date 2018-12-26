@@ -125,6 +125,8 @@ object ContraVarainceTestApp extends App {
   // Print[Org] since it is Covariant in Print[-A]
 
 
-  // Just remove Covariant type(-A) and replace with InVarinat A and it will not work Compile time error
+  // Just remove Covariant type(-A) and replace with InVarinat A and it will not work static error
+
+
 
 }
