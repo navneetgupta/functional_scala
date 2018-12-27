@@ -37,11 +37,11 @@ object OddEvenEx extends App {
 
   def even2[A](xs: List[A]) : Trampoline[Boolean] = {
     xs match {
-      case Nil => done(false)
+      case Nil => done(true)
       case _ :: tail => suspend(odd2(tail))
     }
   }
 
-  println(odd2(List(1, 2, 3)))
-  println(odd2((1 to 1000000).toList))
+  println(odd2(List(1, 2, 3)).run)
+  println(odd2((1 to 1000000).toList).run)
 }

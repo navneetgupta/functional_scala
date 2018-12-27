@@ -14,9 +14,9 @@ import cats.implicits._
   * Because map leaves the structure of the context unchanged, we can call it repeatedly to sequence multiple computations
   * on the contents of an initial data structure:
   *
-  * It turns out that single argument func􏰁ons are also functors.
+  * It turns out that single argument func􏰁tions are also functors.
   *
-  * Formally, a functor is a type F[A] with an opera􏰁on map with type (A => B) => F[B]
+  * Formally, a functor is a type F[A] with an operati􏰁on map with type (A => B) => F[B]
   *
   * trait Functor[F[_]] {
   * def map[A, B](fa: F[A])(f: A => B): F[B]

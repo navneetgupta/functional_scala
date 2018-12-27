@@ -1,6 +1,7 @@
 package com.navneetgupta.scalaz.zio
 
 import scalaz.zio.{Ref, IO}
+import scalaz.zio.console._
 
 object RefEx extends App {
   // Ref[A] models a mutable reference to a value of type A
@@ -27,4 +28,18 @@ object RefEx extends App {
 
 
 
+}
+
+object RefEx2 extends App {
+  def main2() = {
+    for {
+      ref <- Ref(100)
+      v1 <- ref.get
+      v2 <- ref.set(v1 - 50)
+      _ <- putStrLn("Value v1 = " + v1)
+      _ <- putStrLn("Value v2 = " + v2)
+    } yield ()
+  }
+
+  main2().forever
 }
