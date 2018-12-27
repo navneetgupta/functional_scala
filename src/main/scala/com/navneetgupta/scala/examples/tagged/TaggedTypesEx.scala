@@ -14,7 +14,7 @@ object ProblemEx {
   val s2 = Student("Gupta", "Navneet")
 
   implicit val StudentEqInstace = new Equal[Student] {
-    def equal(s1: Student, s2 : Student) :Boolean = s1.firstName == s2.firstName && s1.lastName == s2.lastName
+    def equal(s1: Student, s2 : Student) :Boolean = s1.firstName === s2.firstName && s1.lastName === s2.lastName
   }
 
   println(s1 != s2)
@@ -23,8 +23,6 @@ object ProblemEx {
   // Since there is nothing difference betwwen firstName /lastname both are string and Run time it will fail badly
 
   // To avoid raise the error during Compile time if someone try to exchange those value
-
-
 }
 
 object SolnUsingValueClassEx extends App {
@@ -138,18 +136,10 @@ object SolnUsingTaggedTypeParameters extends App {
   println(s"s2 FirstName : ${Tag.unwrap(s2.firstName)} , LastName : ${Tag.unwrap(s2.lastName)}")
 
   /**
-    *
-    * What are selling points of tagged types?
-    *
-    * 1. they exist only in compiler type - in runtime 'String @@ Name' degenerates into just 'String',
-    * so there is no performance penalty,
-    *
-    * 2. since tagging is just a matter of casting, you can lift everything -  even types that weren’t intended for lifting.
-    * But with tagged types we can e.g. take existing type class and cast them into tagged representation,
-    *
-    * 3. they are so easy to implement, one can add them to their project in like 5 minutes.
-    * Then, if used consequently, one can better model domain, and make the invalid logic more difficult to write accidentally.
+    * exist only during compiler type - in runtime 'String @@ Name' degenerates into just 'String'
+    *     => no Performance issue while runtime
     * */
+
 }
 
 
