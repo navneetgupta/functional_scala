@@ -1,4 +1,4 @@
-package com.navneetgupta.scala.examples
+package com.navneetgupta.scala.examples.Free
 
 object FreeEx extends App {
   /**

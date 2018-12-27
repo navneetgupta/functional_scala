@@ -1,4 +1,4 @@
-package com.navneetgupta.scala.examples
+package com.navneetgupta.scala.examples.Free
 
 object FreeFunctorApp {
   trait Functor[F[_]] {
@@ -9,5 +9,3 @@ object FreeFunctorApp {
     def apply[F[_]](implicit F: Functor[F]): Functor[F] = F
   }
 }
-
-

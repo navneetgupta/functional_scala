@@ -1,7 +1,6 @@
-package com.navneetgupta.scala.examples
+package com.navneetgupta.scala.examples.Free
 
 object FreeMonadApp extends App{
-  import FreeFunctorApp._
 
   //   minimal Set For Monad
   trait Monad[F[_]] {
@@ -63,8 +62,8 @@ object LawsIdentificationApp extends App {
 }
 
 object FreeSugar {
-  import FreeMonadApp._
   import FreeFunctorApp._
+  import FreeMonadApp._
 
   implicit def freeMonadFunctor[F[_]]: Functor[Free[F, ?]] = new Functor[Free[F, ?]] {
     def map[A, B](fa: Free[F, A])(f: A => B): Free[F, B] = Monad[Free[F, ?]].flatMap(fa)(a => Pure(f(a)))

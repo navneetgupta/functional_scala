@@ -129,4 +129,57 @@ object ContraVarainceTestApp extends App {
 
 
 
+
 }
+
+// Lets See with List
+
+object InVariantTypeExWithList {
+  //
+
+  abstract class List[T] { }
+  case object Nil extends List[Nothing]
+  case class Cons[T](head: T, tail: List[T]) extends List[T]
+
+  // The below fail to Compile because List is Invarinat to type T(Org in Below line)
+  // and since its invariant => it only takes T not sub/susper Type of T
+
+//  val list: List[Org] = Cons(Model.HeadBranch("address1"), Cons(HeadBranch("address2"), Nil))
+}
+
+object CoVariantTypeExWithList {
+  //
+  import Model._
+
+  abstract class List[+T] { }
+  case object Nil extends List[Nothing]
+  case class Cons[+T](head: T, tail: List[T]) extends List[T]
+
+  // The below fail to Compile because List is Invarinat to type T(Org in Below line)
+  // and since its invariant => it only takes T not sub/susper Type of T
+
+  val list: List[Org] = Cons(HeadBranch("address1"), Cons(HeadBranch("address2"), Nil))
+}
+
+object ContraVaraintTypeExWithList {
+
+//  abstract class List[-T] { }
+//  case object Nil extends List[Nothing]
+//  case class Cons[-T](head: T, tail: List[T]) extends List[T]
+//
+//  abstract class School extends Org {}
+//
+//  class DAV extends School {
+//    override def address: String = "D.A.V."
+//  }
+//
+//  class STU extends School {
+//    override def address: String = "Stanford College"
+//  }
+
+  // The below fail to Compile because List is Invarinat to type T(Org in Below line)
+  // and since its invariant => it only takes T not sub/susper Type of T
+
+//  val list: List[DAV] = Cons(HeadBranch("address1"), Cons(HeadBranch("address2"), Nil))
+}
+

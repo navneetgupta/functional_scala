@@ -14,6 +14,7 @@ object UpperTypeBoundEx extends App {
     override def address: String = "Stanford College"
   }
 
+  //  'A <: T' means that 'A' refers to a subtype of 'T' => P refers to subType of School ie. DAV/STU
   class SchoolContainer[P <: School](p: P) {
     def school: School = p
   }
