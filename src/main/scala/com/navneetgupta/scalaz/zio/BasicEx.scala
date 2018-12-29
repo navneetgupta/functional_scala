@@ -1,7 +1,7 @@
 package com.navneetgupta.scalaz.zio
 
 import scalaz.zio.console._
-import scalaz.zio.IO
+import scalaz.zio.{IO,App}
 
 object BasicEx {
 
@@ -11,11 +11,6 @@ object BasicEx {
       name <- getStrLn
       _ <- putStrLn(s"Welcome Dear $name")
     } yield()
-  }
-
-  def main(args: Array[String]) = {
-    main2()
-    ()
   }
 
   def runInParallel[E, A, B](
@@ -29,4 +24,9 @@ object BasicEx {
       b <- rightBinder.join
     } yield (a,b)
   }
+}
+
+object BasicExApp extends App {
+  def run(args: List[String]): IO[Nothing, ExitStatus] =
+    BasicEx.main2().attempt.map(_.fold(_ => 1, _ => 0)).map(ExitStatus.ExitNow(_))
 }
