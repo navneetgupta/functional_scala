@@ -1,6 +1,8 @@
 package com.navneetgupta.scalaz.zio
 
-import scalaz.zio.{IO, Queue, Promise}
+import scalaz.zio.{IO, Promise, Queue, RTS}
+import scalaz.zio.console._
+
 
 object QueueEx extends App {
   // Queue is a lightweight in-memory queue built on ZIO with composable and transparent back-pressure.
@@ -62,4 +64,22 @@ object QueueEx extends App {
     _ <- queue.shutdown
     _ <- f.join
   } yield ()
+
+  val rts = new RTS{}
+
+  rts.unsafeRun(
+    for {
+      a <- res
+      _ <- putStrLn(s"Value is ${a}")
+      b <- resp
+      _ <- putStrLn(s"Value is ${b}")
+      c <- multipleConsume
+      _ <- putStrLn(s"Value is ${c}")
+      d <- takeAll
+      _ <- putStrLn(s"Value is ${d}")
+      _ <- shuttingDown
+      _ <- putStrLn(s"Value is unit")
+    } yield ()
+  )
+
 }

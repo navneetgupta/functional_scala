@@ -4,7 +4,7 @@ import java.io.IOException
 
 import scalaz.zio.console._
 import scalaz.zio.duration._
-import scalaz.zio.{IO, Promise}
+import scalaz.zio.{IO, Promise, RTS}
 
 
 object PromiseAppEx extends App {
@@ -36,5 +36,11 @@ object PromiseAppEx extends App {
     _ <- (fiberA zip fiberB).join
   } yield ()
 
+  val rts = new RTS{}
 
+  rts.unsafeRun(for {
+    res <- ioCompleted
+    _ <- putStrLn(s"does ioFiber Completed : ${res}")
+    _ <- program
+  }yield())
 }
