@@ -2,9 +2,11 @@ package com.navneetgupta.scalaz.zio
 
 import java.io.IOException
 
-import scalaz.zio.IO
+import scalaz.zio.console._
+import scalaz.zio.{IO, RTS}
 
-object FailureEx extends App {
+
+object FailureEx {
 
   // Like all IO values, these are immutable values and do not actually throw any exceptions;
   // They merely describe failure as a first-class value.
@@ -51,5 +53,30 @@ object FailureEx extends App {
   sealed trait Content
 
   case class NoContent[A](value: A) extends Content
+
+
+}
+
+object FailureExApp extends App {
+  val rts = new RTS{}
+
+
+  def sqrt(io: IO[Nothing, Double]): IO[String, Double] =
+    IO.absolve(
+      a1(io)
+    )
+
+  def a1(io: IO[Nothing, Double]): IO[Nothing, Either[String, Double]] =
+    io.map(value =>
+      if (value < 0.0) Left("Value must be >= 0.0")
+      else Right(Math.sqrt(value))
+    )
+
+  rts.unsafeRun(
+    for {
+      sqrt5 <- sqrt(IO.point(5.0))
+      _ <- putStrLn(s"sqrt of 5 is ${sqrt5}")
+    }yield ())
+
 
 }

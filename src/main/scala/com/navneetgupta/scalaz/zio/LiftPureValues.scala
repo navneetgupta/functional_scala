@@ -52,7 +52,6 @@ object LiftPureValues extends App{
 
   val z2: IO[Exception, String] = IO.fail("No no!").leftMap(msg => new Exception(msg)) // IO[String, A] to IO[Exception, A]
 
-
   //  Chaining the Request
 
   val z3: IO[Nothing, List[Int]] = IO.point(List(1, 2, 3)).flatMap { list =>

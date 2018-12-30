@@ -1,6 +1,7 @@
 package com.navneetgupta.scalaz.zio
 
-import scalaz.zio.FiberLocal
+import scalaz.zio.{FiberLocal, RTS}
+import scalaz.zio.console._
 
 object FibersLocalExApp extends App {
 
@@ -20,8 +21,15 @@ object FibersLocalExApp extends App {
     v = local.locally(10)(local.get)
   } yield v == Some(3)
 
+  val rts = new RTS{}
 
-  println(a)
-  println(b)
+  rts.unsafeRun(
+    for {
+      a1 <- a
+      b1 <- b
+      _ <- putStrLn(s"a's Value is ${a1}")
+      _ <- putStrLn(s"b's Value is ${b1}")
+    } yield ()
+  )
 
 }
