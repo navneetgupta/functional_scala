@@ -13,6 +13,15 @@ object FailureEx {
 
   val z: IO[String, String] = IO.fail(error = "Failing Intentionally")
 
+  //surface failures with attempt, which takes an IO[E, A] and produces an IO[E2, Either[E, A]].
+  // The choice of E2 is unconstrained, because the resulting computation cannot fail with any error.
+
+  readUrls("data.json").attempt.map {
+    case Left(_)     => "42"
+    case Right(data) => data
+  }
+
+
   // Submerge failures with IO.absolve, which is the opposite of attempt and turns an IO[E, Either[E, A]] into an IO[E, A]:
 
   def sqrt(io: IO[Nothing, Double]): IO[String, Double] =
@@ -29,9 +38,9 @@ object FailureEx {
 
   val z1: IO[IOException, Array[Byte]] = openFile("primary.json").catchAll(_ => openFile("backup.json"))
 
-  def openFile[E, A](str: String): IO[E, A] = ???
+  def openFile[E, A](fileName: String): IO[E, A] = ???
 
-  val z2: IO[IOException, Array[Byte]] = openFile(str = "primary.json").catchSome {
+  val z2: IO[IOException, Array[Byte]] = openFile("primary.json").catchSome {
     case _: java.io.FileNotFoundException => openFile("backup.json")
   }
 
