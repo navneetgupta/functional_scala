@@ -17,7 +17,7 @@ object FailureEx {
   // The choice of E2 is unconstrained, because the resulting computation cannot fail with any error.
 
   readUrls("data.json").attempt.map {
-    case Left(_)     => "42"
+    case Left(_) => "42"
     case Right(data) => data
   }
 
@@ -67,7 +67,7 @@ object FailureEx {
 }
 
 object FailureExApp extends App {
-  val rts = new RTS{}
+  val rts = new RTS {}
 
 
   def sqrt(io: IO[Nothing, Double]): IO[String, Double] =
@@ -85,7 +85,7 @@ object FailureExApp extends App {
     for {
       sqrt5 <- sqrt(IO.point(5.0))
       _ <- putStrLn(s"sqrt of 5 is ${sqrt5}")
-    }yield ())
+    } yield ())
 
 
 }

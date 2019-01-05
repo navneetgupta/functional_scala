@@ -16,7 +16,7 @@ object ScheduleEx extends App {
     * and based on these values and internal state, decides whether to recur or conclude. Every decision is
     * accompanied by a (possibly zero) delay, indicating how much time before the next recurrence,
     * and an output value of type B.
-    * */
+    **/
 
   val forever = Schedule.forever
   val never = Schedule.never
@@ -29,17 +29,17 @@ object ScheduleEx extends App {
   val boosted = Schedule.spaced(1.second).delayed(_ + 100.milliseconds)
 
 
-//  Combines two schedules through intersection, by recurring only if
+  //  Combines two schedules through intersection, by recurring only if
   //  both schedules want to recur, using the maximum of the two delays between recurrences:
 
   val expUpTo10 = Schedule.exponential(1.second) && Schedule.recurs(10)
 
-//  Combines two schedules through union, by recurring if either schedule wants to recur,
+  //  Combines two schedules through union, by recurring if either schedule wants to recur,
   //  using the minimum of the two delays between recurrences:
 
   val expCapped = Schedule.exponential(100.milliseconds) || Schedule.spaced(1.second)
 
-//  Combines two schedules sequentially, by following the first policy until it ends,
+  //  Combines two schedules sequentially, by following the first policy until it ends,
   //  and then following the second policy:
 
   val sequential = Schedule.recurs(10) <||> Schedule.spaced(1.second)

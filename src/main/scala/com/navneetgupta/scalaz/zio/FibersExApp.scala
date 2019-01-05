@@ -42,6 +42,7 @@ object FibersFibEx {
       } yield v1 + v2
     }
   }
+
   def test() = {
     for {
       f1 <- fib(1)
@@ -66,10 +67,11 @@ object FibersFibEx {
       _ <- putStrLn(s" Fibonacci 10 is ${f10}")
     } yield ()
   }
+
   //  Two IO actions can be raced, which means they will be executed in parallel, and the value of the first action that completes successfully will be returned.
 
-//  println(fib(100) race fib(200))
-//    The race combinator is resource-safe, which means that if one of the two actions returns a value, the other one will be interrupted,
+  //  println(fib(100) race fib(200))
+  //    The race combinator is resource-safe, which means that if one of the two actions returns a value, the other one will be interrupted,
   //  to prevent wasting resources.
 
   //  The race and even par combinators are a specialization of a much-more powerful combinator called raceWith,

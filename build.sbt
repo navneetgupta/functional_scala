@@ -10,6 +10,9 @@ version      := "0.1.0"
 
 scalacOptions ++= Seq(
   "-feature",
+  "-deprecation",
+  "-unchecked",
+  "-language:postfixOps",
   "-Xfatal-warnings",
   "-Ypartial-unification",
   "-language:higherKinds",
@@ -19,6 +22,7 @@ scalacOptions ++= Seq(
 addCompilerPlugin("org.scalamacros" % "paradise" % "2.1.0" cross CrossVersion.full)
 
 addCompilerPlugin("org.spire-math" %% "kind-projector" % "0.9.6")
+addCompilerPlugin("com.olegpy" %% "better-monadic-for" % "0.3.0-M4")
 
 libraryDependencies ++= {
 	val akkaVersion = "2.5.13"
@@ -34,12 +38,14 @@ libraryDependencies ++= {
     "org.typelevel" %% "cats-laws" % catVersion,
     "org.typelevel" %% "cats-free" % catVersion,
     "org.typelevel" %% "cats-free" % catVersion,
-    "org.typelevel" %% "cats-effect" % "1.0.0-RC2",
+    "org.typelevel" %% "cats-effect" % "1.1.0",
+    "org.typelevel" %% "cats-effect-laws" % "1.1.0" % "test",
     "org.typelevel" %% "kittens" % "1.1.1",
     "com.github.mpilquist" %% "simulacrum" % "0.14.0",
     "org.scalatest" %% "scalatest" % "3.0.5",
     "com.chuusai" %% "shapeless" % "2.3.3",
     "org.scalaz" %% "scalaz-zio" % "0.5.1",
-    "org.apache.commons" % "commons-io" % "1.3.2"
+    "org.apache.commons" % "commons-io" % "1.3.2",
+    "io.chrisdavenport" %% "cats-par" % "0.2.0"
 	)
 }

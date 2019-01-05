@@ -28,14 +28,14 @@ object OddEvenEx extends App {
 
   // To avoid Stack Overflow Without TCO(Tail recursion optimization we uses trampoline)
 
-  def odd2[A](xs: List[A]) : Trampoline[Boolean] = {
+  def odd2[A](xs: List[A]): Trampoline[Boolean] = {
     xs match {
       case Nil => done(false)
       case _ :: tail => suspend(even2(tail))
     }
   }
 
-  def even2[A](xs: List[A]) : Trampoline[Boolean] = {
+  def even2[A](xs: List[A]): Trampoline[Boolean] = {
     xs match {
       case Nil => done(true)
       case _ :: tail => suspend(odd2(tail))

@@ -27,7 +27,7 @@ object QueueEx extends App {
   val slidingQ: IO[Nothing, Queue[Int]] = Queue.sliding[Int](100)
 
   // UnBounded Q
-  val unboundedQ : IO[Nothing, Queue[Int]] = Queue.unbounded[Int]
+  val unboundedQ: IO[Nothing, Queue[Int]] = Queue.unbounded[Int]
 
   val resp = for {
     queue <- Queue.bounded[Int](2)
@@ -40,14 +40,14 @@ object QueueEx extends App {
     queue <- Queue.bounded[Int](100)
     _ <- queue.offer(10)
     _ <- queue.offer(20)
-    list  <- queue.takeUpTo(5)
+    list <- queue.takeUpTo(5)
   } yield list
 
   val takeAll: IO[Nothing, List[Int]] = for {
     queue <- Queue.bounded[Int](100)
     _ <- queue.offer(10)
     _ <- queue.offer(20)
-    list  <- queue.takeAll
+    list <- queue.takeAll
   } yield list
 
   val shuttingDown: IO[Nothing, Unit] = for {
@@ -65,7 +65,7 @@ object QueueEx extends App {
     _ <- f.join
   } yield ()
 
-  val rts = new RTS{}
+  val rts = new RTS {}
 
   rts.unsafeRun(
     for {

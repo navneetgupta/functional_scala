@@ -21,7 +21,7 @@ object FibersLocalExApp extends App {
     v = local.locally(10)(local.get)
   } yield v == Some(3)
 
-  val rts = new RTS{}
+  val rts = new RTS {}
 
   rts.unsafeRun(
     for {

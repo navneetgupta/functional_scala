@@ -1,10 +1,11 @@
 package com.navneetgupta.scala.examples.Free
 
-object FreeMonadApp extends App{
+object FreeMonadApp extends App {
 
   //   minimal Set For Monad
   trait Monad[F[_]] {
     def pure[A](a: A): F[A]
+
     def flatMap[A, B](fa: F[A])(f: A => F[B]): F[B]
   }
 
@@ -18,11 +19,14 @@ object FreeMonadApp extends App{
   // fa.flatMap(f).flatMap(g) == fa.flatMap(a => f(a).flatMap(g)) -- Associativity
 
   sealed abstract class Free[F[_], A]
+
   final case class Pure[F[_], A](a: A) extends Free[F, A]
+
   final case class FlatMap[F[_], A, B](
-      fa: Free[F, A],
-      f: A => Free[F, B]
-  ) extends Free[F, B]
+                                        fa: Free[F, A],
+                                        f: A => Free[F, B]
+                                      ) extends Free[F, B]
+
   final case class Inject[F[_], A](fa: F[A]) extends Free[F, A]
 
   //  implicit def freeMonad[F[_], A]: Monad[Free[F, ?]] =
@@ -32,15 +36,16 @@ object FreeMonadApp extends App{
   //    }
 
 
-    implicit def freeMonad2[F[_], A]: Monad[Free[F, ?]] =
-      new Monad[Free[F, ?]] {
-        def pure[A](x: A): Free[F, A] = Pure(x)
-        def flatMap[A,B](fa: Free[F, A])(f: A => Free[F, B]): Free[F, B] = fa match {
-          case Pure(x) => f(x)
-          case Inject(ga) => FlatMap(Inject(ga), f)
-          case FlatMap(ga, g) => FlatMap(ga, (a: Any) => FlatMap(g(a), f))
-        }
+  implicit def freeMonad2[F[_], A]: Monad[Free[F, ?]] =
+    new Monad[Free[F, ?]] {
+      def pure[A](x: A): Free[F, A] = Pure(x)
+
+      def flatMap[A, B](fa: Free[F, A])(f: A => Free[F, B]): Free[F, B] = fa match {
+        case Pure(x) => f(x)
+        case Inject(ga) => FlatMap(Inject(ga), f)
+        case FlatMap(ga, g) => FlatMap(ga, (a: Any) => FlatMap(g(a), f))
       }
+    }
 
 }
 
@@ -49,6 +54,7 @@ abstract class ~>[F[_], G[_]] {
 }
 
 object LawsIdentificationApp extends App {
+
   import FreeMonadApp._
 
   type Id[X] = X
@@ -62,6 +68,7 @@ object LawsIdentificationApp extends App {
 }
 
 object FreeSugar {
+
   import FreeFunctorApp._
   import FreeMonadApp._
 
@@ -69,20 +76,25 @@ object FreeSugar {
     def map[A, B](fa: Free[F, A])(f: A => B): Free[F, B] = Monad[Free[F, ?]].flatMap(fa)(a => Pure(f(a)))
   }
 
-  implicit def toFreeOps[F[_], A](fa: Free[F, A]): FreeOps[F,A] = new FreeOps(fa)
+  implicit def toFreeOps[F[_], A](fa: Free[F, A]): FreeOps[F, A] = new FreeOps(fa)
 
   final class FreeOps[F[_], A](self: Free[F, A]) {
     def flatMap[B](f: A => Free[F, B]) = Monad[Free[F, ?]].flatMap(self)(f)
+
     def map[B](f: A => B): Free[F, B] = Functor[Free[F, ?]].map(self)(f)
   }
+
 }
 
 object FreeMonadTestApp extends App {
+
   import FreeMonadApp._
   import FreeSugar._
 
   sealed trait DslOps[A]
+
   final case class PutStrLn(s: String) extends DslOps[Unit]
+
   final case object ReadLn extends DslOps[String]
 
   type Dsl[A] = Free[DslOps, A]

@@ -1,7 +1,7 @@
 package com.navneetgupta.scala
 
 object FunctionTypes extends App {
-  val add10 = (a:Int)  => a+10
+  val add10 = (a: Int) => a + 10
   val toUpper = (a: String) => a.toUpperCase
 
   // :t -v add10 =>  Int => Int => abstract trait Function1[-T1, +R] extends AnyRef
@@ -18,9 +18,9 @@ object FunctionTypes extends App {
     *
     * “Be conservative in what you do, be liberal in what you accept from others” — robustness principle
     *
-    * */
+    **/
 
- /* abstract class List[+T] { self =>
+  /* abstract class List[+T] { self =>
     // lets define a contains method
     def contains(a: T): Boolean = self match{
       case Cons(x, xs) if x == a => true
@@ -40,15 +40,18 @@ object FunctionTypes extends App {
   // we need to make it contravariant to be able to pass it into 'Function1'
   // => make it Contravariant by applyign a Lower Bound
 
-  abstract class List[+T] { self =>
+  abstract class List[+T] {
+    self =>
     // lets define a contains method
-    def contains[T1 >: T](a: T1): Boolean = self match{
+    def contains[T1 >: T](a: T1): Boolean = self match {
       case Cons(x, xs) if x == a => true
       case Cons(x, xs) => xs.contains(a)
       case Nil => false
     }
   }
+
   case object Nil extends List[Nothing]
+
   case class Cons[+T](head: T, tail: List[T]) extends List[T]
 
   // If you have a contravariant type parameter and you need to define a function that returns a value of that type,

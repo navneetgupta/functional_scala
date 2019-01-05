@@ -12,7 +12,7 @@ object DeriveInstancesForCoProducts  extends App {
 
   val shapeGen = Generic[Shape]
 
-  implicit val cnilEncoder: CsvEncoder[CNil] = CsvEncoder.createEncoder(cnil => throw new Exception("InConvicable"))
+  implicit val cnilEncoder: CsvEncoder[CNil] = CsvEncoder.createEncoder(cnil => throw new Exception("In-Convicable"))
 
   implicit def coproductEncoder[H, T <: Coproduct](implicit
                                                hEncoder: CsvEncoder[H],

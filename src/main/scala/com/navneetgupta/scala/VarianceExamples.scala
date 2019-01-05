@@ -2,6 +2,7 @@ package com.navneetgupta.scala
 
 
 object VarianceExamples {
+
   // Wikipedia :=> Variance refers to how subtyping between more complex types relates to subtyping between their components
 
   // Types: Every Value(result of any expresssion) has a type. A type has finite/Infinite Possible Values
@@ -10,9 +11,13 @@ object VarianceExamples {
 
   // Sum Type: Person (Sum Type) has four possible Values (Dollar/ Pound / Euro / Rupees )
   sealed trait Currency
+
   case object Dollar extends Currency
+
   case object Pound extends Currency
+
   case object Euro extends Currency
+
   case object Rupees extends Currency
 
   // Product Type: Combination of n values
@@ -23,7 +28,9 @@ object VarianceExamples {
   // Some/None are subTypes of Option
 
   sealed trait Person
+
   case class Employee(name: String, empId: Int) extends Person
+
   case class Manager(name: String, empId: Int) extends Person
 
 
@@ -31,7 +38,6 @@ object VarianceExamples {
 
   // Person has as kind (*) as it takes no type Paramers
   // Option[A] has a kind of * -> * as it take one type parameters
-
 
 
   /**
@@ -55,17 +61,21 @@ object VarianceExamples {
     *
     * For More Details Refer to Image : images/higher_kinded_types.jpg in the image folder at base of project
     *
-    * */
+    **/
 
-    // Variance
+  // Variance
 }
 
 object Model {
+
   abstract class Org {
     def address: String
   }
+
   case class HeadBranch(address: String) extends Org
+
   case class RegionalBranch(address: String) extends Org
+
 }
 
 object CovarianceTestApp extends App {
@@ -76,9 +86,10 @@ object CovarianceTestApp extends App {
     * For some class List[+A], making A covariant implies that for two types A and B where A is a subtype of B,
     * then List[A] is a subtype of List[B]. This allows us to make very useful and intuitive subtyping
     * relationships using generics.
-    * */
+    **/
 
   import Model._
+
   def printOrgAddresses(orgs: List[Org]) = {
     orgs.foreach(x => println(x.address))
   }
@@ -98,7 +109,8 @@ object ContraVarainceTestApp extends App {
     * some class Writer[-A], making A contravariant implies that for two types A and B where A is
     * a subtype of B, Writer[B] is a subtype of Writer[A].
     *
-    * */
+    **/
+
   import Model._
 
   abstract class Print[-A] {
@@ -108,6 +120,7 @@ object ContraVarainceTestApp extends App {
   class HeadBranchPrinter extends Print[HeadBranch] {
     override def printIt(a: HeadBranch): Unit = println(s"The Head Branch address is ${a.address}")
   }
+
   class OrgPrinter extends Print[Org] {
     override def printIt(a: Org): Unit = println(s"The Org address is ${a.address}")
   }
@@ -128,31 +141,34 @@ object ContraVarainceTestApp extends App {
   // Just remove Covariant type(-A) and replace with InVarinat A and it will not work static error
 
 
-
-
 }
 
 // Lets See with List
 
 object InVariantTypeExWithList {
+
   //
 
-  abstract class List[T] { }
+  abstract class List[T] {}
+
   case object Nil extends List[Nothing]
+
   case class Cons[T](head: T, tail: List[T]) extends List[T]
 
   // The below fail to Compile because List is Invarinat to type T(Org in Below line)
   // and since its invariant => it only takes T not sub/susper Type of T
 
-//  val list: List[Org] = Cons(Model.HeadBranch("address1"), Cons(HeadBranch("address2"), Nil))
+  //  val list: List[Org] = Cons(Model.HeadBranch("address1"), Cons(HeadBranch("address2"), Nil))
 }
 
 object CoVariantTypeExWithList {
   //
   import Model._
 
-  abstract class List[+T] { }
+  abstract class List[+T] {}
+
   case object Nil extends List[Nothing]
+
   case class Cons[+T](head: T, tail: List[T]) extends List[T]
 
   // The below fail to Compile because List is Invarinat to type T(Org in Below line)
@@ -163,23 +179,23 @@ object CoVariantTypeExWithList {
 
 object ContraVaraintTypeExWithList {
 
-//  abstract class List[-T] { }
-//  case object Nil extends List[Nothing]
-//  case class Cons[-T](head: T, tail: List[T]) extends List[T]
-//
-//  abstract class School extends Org {}
-//
-//  class DAV extends School {
-//    override def address: String = "D.A.V."
-//  }
-//
-//  class STU extends School {
-//    override def address: String = "Stanford College"
-//  }
+  //  abstract class List[-T] { }
+  //  case object Nil extends List[Nothing]
+  //  case class Cons[-T](head: T, tail: List[T]) extends List[T]
+  //
+  //  abstract class School extends Org {}
+  //
+  //  class DAV extends School {
+  //    override def address: String = "D.A.V."
+  //  }
+  //
+  //  class STU extends School {
+  //    override def address: String = "Stanford College"
+  //  }
 
   // The below fail to Compile because List is Invarinat to type T(Org in Below line)
   // and since its invariant => it only takes T not sub/susper Type of T
 
-//  val list: List[DAV] = Cons(HeadBranch("address1"), Cons(HeadBranch("address2"), Nil))
+  //  val list: List[DAV] = Cons(HeadBranch("address1"), Cons(HeadBranch("address2"), Nil))
 }
 

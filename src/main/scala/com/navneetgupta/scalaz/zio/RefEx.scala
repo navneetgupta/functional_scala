@@ -23,9 +23,9 @@ object RefEx extends App {
         else
           IO.unit
       }
+
       loop
     }
-
 
 
 }
