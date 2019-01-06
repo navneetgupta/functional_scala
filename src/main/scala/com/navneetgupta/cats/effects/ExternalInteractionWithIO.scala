@@ -1,7 +1,12 @@
 package com.navneetgupta.cats.effects
 
+import cats.Applicative
 import cats.effect._
+import cats.effect.concurrent.Ref
+
+import scala.concurrent.ExecutionContext
 import cats.implicits._
+import com.navneetgupta.cats.effects.TaglessSupportEx2.StdConsole
 
 object ExternalInteractionWithIO extends IOApp {
   val program: IO[Unit] =
@@ -41,7 +46,7 @@ object TaglessSupportedEx {
   import Common._
   import cats.Monad
 
-  def program[F[_]: Console : Monad]: F[Unit] =
+  def program[F[_]: Common.Console: Monad]: F[Unit] =
     for {
       _ <- putStrLn("Enter Your Name: ")
       name <- readLn
@@ -50,9 +55,8 @@ object TaglessSupportedEx {
 }
 
 object StdConsoleApp extends IOApp {
-  import Common._
 
-  implicit val ConsoleIO = new Console[IO] {
+  implicit val ConsoleIO = new Common.Console[IO] {
     def putStrLn(line: String): IO[Unit] = IO(println(line))
 
     def readLn(): IO[String] = IO(scala.io.StdIn.readLine)
@@ -60,28 +64,27 @@ object StdConsoleApp extends IOApp {
 
   override def run(args: List[String]): IO[ExitCode] =
     for {
-    _ <- TaglessSupportedEx.program[IO]
-  } yield ExitCode.Success
+      _ <- TaglessSupportedEx.program[IO]
+    } yield ExitCode.Success
 }
 
 object TaglessSupportEx2 extends IOApp {
-  import Common._
   import cats.Monad
 
-  def program[F[_]: Monad](implicit C: Console[F]): F[Unit] =
+  def program[F[_]: Monad](implicit C: Common.Console[F]): F[Unit] =
     for {
       _ <- C.putStrLn("Enter Your Name: ")
       name <- C.readLn
       _ <- C.putStrLn(s"Hello Dear $name")
     } yield ()
 
-  class StdConsole[F[_]: Sync] extends Console[F] {
+  class StdConsole[F[_]: Sync] extends Common.Console[F] {
     override def putStrLn(str: String): F[Unit] = Sync[F].delay(println(str))
 
     override def readLn(): F[String] = Sync[F].delay(scala.io.StdIn.readLine)
   }
 
-  implicit val ConsoleIO =  new StdConsole[IO]
+  implicit val ConsoleIO = new StdConsole[IO]
 
   override def run(args: List[String]): IO[ExitCode] =
     for {
@@ -89,7 +92,6 @@ object TaglessSupportEx2 extends IOApp {
     } yield ExitCode.Success
 
 }
-
 
 //object TaglessRemoteConsoleEx extends IOApp {
 //  import Common._
@@ -134,3 +136,32 @@ object TaglessSupportEx2 extends IOApp {
 //    } yield ExitCode.Success
 //
 //}
+
+object TestTaglessProgramEx extends App {
+  import cats.Monad
+
+  def program[F[_]: Monad](implicit C: Common.Console[F]): F[Unit] =
+    for {
+      _ <- C.putStrLn("Enter Your Name: ")
+      name <- C.readLn
+      _ <- C.putStrLn(s"Hello Dear $name")
+    } yield ()
+
+  class TestConsole[F[_]: Applicative](state: Ref[F, List[String]])
+      extends Common.Console[F] {
+    override def putStrLn(str: String): F[Unit] = state.update(_ :+ str)
+
+    override def readLn(): F[String] = "test".pure[F]
+  }
+
+//  implicit def ConsoleIO(state: Ref[IO, List[String]]) =  new TestConsole[IO](state)
+
+  val spec = for {
+    state <- Ref.of[IO, List[String]](List.empty[String])
+    implicit0(c: Common.Console[IO]) = new TestConsole[IO](state)
+    _ <- program[IO]
+    st <- state.get
+  } yield st
+
+  println(spec.unsafeToFuture())
+}

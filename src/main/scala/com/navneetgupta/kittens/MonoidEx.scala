@@ -20,8 +20,6 @@ object MonoidData {
 
 object MonoidEx extends App {
 
-  import cats.instances.option._
-  import cats.instances.list._
   import derived.auto.monoid._
   import MonoidData._
 
@@ -56,8 +54,6 @@ object MonoidEx2 extends App {
 
 object MonoidEx3 extends App {
 
-  import cats.instances.option._
-  import cats.instances.list._
   import derived.auto.monoid._
   import MonoidData._
 
@@ -65,6 +61,21 @@ object MonoidEx3 extends App {
   val orderOMonoidValue = Monoid.apply[Option[Order]].combine(Some(o1), Some(o2))
   val orderOMonoidValue2 = Monoid.apply[Option[Order]].combine(Some(o1), None)
   val orderLMonoidValue = Monoid.apply[List[Order]].combine(List(o1), List(o2))
+  println(orderMonoidValue)
+  println(orderOMonoidValue)
+  println(orderOMonoidValue2)
+  println(orderLMonoidValue)
+}
+
+object MonoidEx7 extends App {
+
+  import derived.auto.monoid._
+  import MonoidData._
+
+  val orderMonoidValue = Monoid[Order].combine(o1, o2)
+  val orderOMonoidValue = Monoid[Option[Order]].combine(Some(o1), Some(o2))
+  val orderOMonoidValue2 = Monoid[Option[Order]].combine(Some(o1), None)
+  val orderLMonoidValue = Monoid[List[Order]].combine(List(o1), List(o2))
   println(orderMonoidValue)
   println(orderOMonoidValue)
   println(orderOMonoidValue2)
