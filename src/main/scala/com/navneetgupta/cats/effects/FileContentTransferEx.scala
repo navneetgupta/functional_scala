@@ -11,9 +11,9 @@ trait Transfer[F[_]] {
   def transfer(input: InputStream, output: OutputStream): F[Long]
 }
 
-object Transfer {
-  def apply[F[_]](implicit F: Transfer[F]): Transfer[F] = F
-}
+//object Transfer {
+//  def apply[F[_]](implicit F: Transfer[F]): Transfer[F] = F
+//}
 
 trait Stream[F[_]] {
   def inputStream(f: File): Resource[F, FileInputStream]
@@ -49,12 +49,13 @@ object FileContentTransferEx {
     Stream[F].inputOutputStream(in, out)
 
   def copy[F[_]: Transfer](source: File, dest: File): F[Long] =
-    Transfer[F].copy(source, dest)
+    implicitly[Transfer[F]].copy(source, dest)
+  // Above implicitly could be also used instead fo defining `def apply[F[_]](implicit F: Transfer[F]): Transfer[F] = F` in object and using Transfer[F].copy(source,dest)
 
 
   def transfer[F[_]: Transfer](input: InputStream,
                                output: OutputStream): F[Long] =
-    Transfer[F].transfer(input, output)
+    implicitly[Transfer[F]].transfer(input, output)
 
   def putStrLn[F[_]: Console](line: String): F[Unit] = Console[F].putStrLn(line)
 
@@ -93,14 +94,14 @@ object ExampleApp extends IOApp {
       Resource.make {
         IO(new FileInputStream(f)) // build
       } { inStream =>
-        IO(inStream.close()).handleErrorWith(_ => IO.unit) // release
+        IO(inStream.close()).handleErrorWith( _ => IO.unit) // release
       }
 
     def outputStream(f: File): Resource[IO, FileOutputStream] =
       Resource.make {
         IO(new FileOutputStream(f)) // build
       } { outStream =>
-        IO(outStream.close()).handleErrorWith(_ => IO.unit) // release
+        IO(outStream.close()).handleErrorWith( _ => IO.unit) // release
       }
 
     def inputOutputStream(
