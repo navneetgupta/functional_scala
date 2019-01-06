@@ -1,11 +1,7 @@
 package com.navneetgupta.cats.effects
 
-import cats.Monad
 import cats.effect._
 import cats.implicits._
-import com.navneetgupta.cats.effects.TaglessSupportEx2.StdConsole
-
-import scala.concurrent.ExecutionContext
 
 object ExternalInteractionWithIO extends IOApp {
   val program: IO[Unit] =
@@ -69,8 +65,8 @@ object StdConsoleApp extends IOApp {
 }
 
 object TaglessSupportEx2 extends IOApp {
-  import cats.Monad
   import Common._
+  import cats.Monad
 
   def program[F[_]: Monad](implicit C: Console[F]): F[Unit] =
     for {
@@ -86,6 +82,7 @@ object TaglessSupportEx2 extends IOApp {
   }
 
   implicit val ConsoleIO =  new StdConsole[IO]
+
   override def run(args: List[String]): IO[ExitCode] =
     for {
       _ <- program[IO]
@@ -94,46 +91,46 @@ object TaglessSupportEx2 extends IOApp {
 }
 
 
-object TaglessRemoteConsoleEx extends IOApp {
-  import Common._
-  import scala.concurrent.Future
-
-  implicit val ec = ExecutionContext.global
-
-
-  def program[F[_]: Monad](implicit C: Console[F]): F[Unit] =
-    for {
-      _ <- C.putStrLn("Enter Your Name: ")
-      name <- C.readLn
-      _ <- C.putStrLn(s"Hello Dear $name")
-    } yield ()
-
-
-  def remoteWrite(str: String): Future[Unit] = Future {println(str)}
-  def remoteRead(): Future[String] = Future {scala.io.StdIn.readLine}
-  class RemoteConsole[F[_]: Async] extends Console[F] {
-
-    private def fromFuture[A](fa: F[Future[A]]): F[A] = {
-      fa.flatMap {future =>
-        Async[F].async {cb =>
-          future.onComplete {
-            case Success(x) => cb(Right(x))
-            case Failure(e) => cb(Left(e))
-          }
-        }
-      }
-    }
-    override def putStrLn(str: String): F[Unit] = fromFuture(Sync[F].delay(remoteWrite(str)))
-
-    override def readLn(): F[String] = fromFuture(Sync[F].delay(remoteRead))
-  }
-
-
-
-  implicit val ConsoleIO =  new RemoteConsole[IO]
-  override def run(args: List[String]): IO[ExitCode] =
-    for {
-      _ <- program[IO]
-    } yield ExitCode.Success
-
-}
+//object TaglessRemoteConsoleEx extends IOApp {
+//  import Common._
+//  import scala.concurrent.Future
+//
+//  implicit val ec = ExecutionContext.global
+//
+//
+//  def program[F[_]: Monad](implicit C: Console[F]): F[Unit] =
+//    for {
+//      _ <- C.putStrLn("Enter Your Name: ")
+//      name <- C.readLn
+//      _ <- C.putStrLn(s"Hello Dear $name")
+//    } yield ()
+//
+//
+//  def remoteWrite(str: String): Future[Unit] = Future {println(str)}
+//  def remoteRead(): Future[String] = Future {scala.io.StdIn.readLine}
+//  class RemoteConsole[F[_]: Async] extends Console[F] {
+//
+//    private def fromFuture[A](fa: F[Future[A]]): F[A] = {
+//      fa.flatMap {future =>
+//        Async[F].async {cb =>
+//          future.onComplete {
+//            case Success(x) => cb(Right(x))
+//            case Failure(e) => cb(Left(e))
+//          }
+//        }
+//      }
+//    }
+//    override def putStrLn(str: String): F[Unit] = fromFuture(Sync[F].delay(remoteWrite(str)))
+//
+//    override def readLn(): F[String] = fromFuture(Sync[F].delay(remoteRead))
+//  }
+//
+//
+//
+//  implicit val ConsoleIO =  new RemoteConsole[IO]
+//  override def run(args: List[String]): IO[ExitCode] =
+//    for {
+//      _ <- program[IO]
+//    } yield ExitCode.Success
+//
+//}
