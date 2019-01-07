@@ -1,12 +1,13 @@
 package com.navneetgupta.cats.effects
 
-import scala.collection.SortedSet
-import cats.effect._
 import java.io.{BufferedReader, File, FileReader}
 import java.util.UUID
-import scala.concurrent.duration._
 import java.util.stream.Collectors
+
+import cats.effect._
 import cats.implicits._
+
+import scala.collection.SortedSet
 
 object TaglessAnotherEx {
   import Common._
@@ -32,11 +33,11 @@ object TaglessAnotherEx {
 
   def generateId: IO[UUID]= IO(UUID.randomUUID())
 
-  def longProcess1(bands: List[Band]): IO[Unit] =
-    putStrLn("Starting process 1") *> IO.sleep(3.seconds) *> putStrLn("Process 1 DONE")
-
-  def longProcess2(bands: List[Band]): IO[Unit] =
-    putStrLn("Starting process 2") *> IO.sleep(2.seconds) *> putStrLn("Process 2 DONE")
+//  def longProcess1(bands: List[Band]): IO[Unit] =
+//    putStrLn("Starting process 1") *> IO.sleep(3.seconds) *> putStrLn("Process 1 DONE")
+//
+//  def longProcess2(bands: List[Band]): IO[Unit] =
+//    putStrLn("Starting process 2") *> IO.sleep(2.seconds) *> putStrLn("Process 2 DONE")
 
   def publishRadioChart(id: UUID, bands: SortedSet[Band]): IO[Unit] =
     putStrLn(s"Radio Chart for $id: ${bands.map(_.value).mkString(", ")}")
@@ -47,7 +48,7 @@ object TaglessAnotherEx {
   val generateChart: IO[Unit] =
     for {
       b <- getBandsFromFile
-      _ <- IO.race(longProcess1(b),longProcess2(b)) // who ever completes first of two long running process
+//      _ <- IO.race(longProcess1(b),longProcess2(b)) // who ever completes first of two long running process
       id <- generateId
       _ <- publishRadioChart(id, SortedSet( b: _*))
       _ <- publishTvChart(id, SortedSet(b: _*))
