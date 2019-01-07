@@ -3,10 +3,7 @@ package com.navneetgupta.cats.effects
 import cats.Applicative
 import cats.effect._
 import cats.effect.concurrent.Ref
-
-import scala.concurrent.ExecutionContext
 import cats.implicits._
-import com.navneetgupta.cats.effects.TaglessSupportEx2.StdConsole
 
 object ExternalInteractionWithIO extends IOApp {
   val program: IO[Unit] =
@@ -137,6 +134,8 @@ object TaglessSupportEx2 extends IOApp {
 //
 //}
 
+
+// To test pure logic
 object TestTaglessProgramEx extends App {
   import cats.Monad
 
