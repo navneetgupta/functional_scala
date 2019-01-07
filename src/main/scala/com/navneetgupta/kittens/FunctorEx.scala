@@ -2,7 +2,6 @@ package com.navneetgupta.kittens
 
 import cats.Functor
 import cats.derived
-import com.navneetgupta.common._
 import cats.implicits._
 
 sealed trait Tree[+A]
@@ -28,7 +27,6 @@ object FucntorData {
 
 object FunctorEx extends App {
   implicit val fc: Functor[Tree] = {
-    import derived.auto.functor._
     derived.semi.functor
   }
 
