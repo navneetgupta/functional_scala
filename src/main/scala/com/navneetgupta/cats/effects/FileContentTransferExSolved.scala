@@ -165,3 +165,12 @@ object FileContentTransferExSolvedApp extends IOApp {
 
 // navneet_gupta> sbt
 // sbt:navneet_gupta> runMain com.navneetgupta.cats.effects.FileContentTransferExSolvedApp build.sbt dest.txt
+
+
+/**
+  * Notes:
+  *
+  * IO is able to encapsulate side-effects, but the capacity to define concurrent and/or async and/or cancelable IO
+  * instances comes from the existence of a Concurrent[IO] instance. Concurrent[F[_]] is a type class that, for an F
+  * carrying a side-effect, brings the ability to cancel or start concurrently the side-effect in F.
+  * */
