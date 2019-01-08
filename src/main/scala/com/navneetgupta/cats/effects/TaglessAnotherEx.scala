@@ -9,7 +9,7 @@ import cats.syntax.all._
 
 import scala.collection.SortedSet
 
-object TaglessAnotherEx extends IOApp {
+object TaglessAnotherBadEx extends IOApp {
 
   import Common._
 
@@ -60,6 +60,51 @@ object TaglessAnotherEx extends IOApp {
 
   override def run(args: List[String]): IO[ExitCode] =
     for {
-      _ <- generateChart
+      _ <- generateChart    //Timer[IO] default instace provided by IOApp
     } yield ExitCode.Success
 }
+
+
+object TaglessAnotherImprovedSoln {
+
+  case class Band(value: String) extends AnyVal
+  object Algebras {
+    trait DataSource[F[_]] {
+      def bands: F[List[Band]]
+    }
+    trait IdGen[F[_]] {
+      def generateId: F[UUID]
+    }
+    trait InternalProcess[F[_]] {
+      def process(bands: SortedSet[Band]): F[Unit]
+    }
+    trait RadioChart[F[_]] {
+      def publish(id: UUID, bands: SortedSet[Band]): F[Unit]
+    }
+    trait TvChart[F[_]] {
+      def publish(id: UUID,bands: SortedSet[Band]): F[Unit]
+    }
+    def bands[F[_]: DataSource] = implicitly[DataSource[F]].bands
+    def generateId[F[_]: IdGen] = implicitly[IdGen[F]].generateId
+    def process[F[_]: InternalProcess](bands: SortedSet[Band]) = implicitly[InternalProcess[F]].process(bands)
+    def publishRadio[F[_]: RadioChart](id: UUID, bands: SortedSet[Band])= implicitly[RadioChart[F]].publish(id, bands)
+    def publishTv[F[_]: TvChart](id: UUID, bands: SortedSet[Band])= implicitly[TvChart[F]].publish(id, bands)
+  }
+
+  object AlgebraInterpretations {
+    import Algebras._
+    class MemRad
+  }
+  import Algebras._
+  import cats.Monad
+
+  def generateCharts[F[_]: Monad : DataSource : IdGen : InternalProcess: RadioChart: TvChart]: F[Unit] =
+    for {
+      b <- bands.map(xs => SortedSet(xs: _*))
+      _ <- process(b)
+      id <- generateId
+      _ <- publishRadio(id, b)
+      _ <- publishTv(id, b)
+    } yield ()
+}
+
