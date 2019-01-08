@@ -72,5 +72,74 @@ object IODataType extends App {
     a
   }))
 
+  // Synchronous effect: equivalent of Sync[IO].delay, describing IO operations that can be evaluated immediately, on the current thread and call-stack:
+  // its execution being “suspended” in the IO context.
+  IO{println("Hello!!")}.unsafeRunSync()
+
+  // Deffered Execution IO.suspend
+
+  def fib2(n: Int, a: Long = 0, b: Long = 1) : IO[Long] =
+    IO.suspend(
+      if(n > 0) fib(n-1, b, a+b)
+      else IO.pure(b)
+    )
+  println("Deffered----------------")
+  println(fib2(100).unsafeRunSync())
+
+  import cats.implicits._
+  import cats.effect.ContextShift
+
+  def fib3(n: Int, a: Long = 0, b: Long = 1)(implicit cs: ContextShift[IO]): IO[Long] =
+    IO.suspend {
+      if (n == 0) IO.pure(a) else {
+        val next = fib(n - 1, b, a + b)
+        // Every 100 cycles, introduce a logical thread fork
+        if (n % 100 == 0)
+          cs.shift *> next
+        else
+          next
+      }
+    }
+
+  implicit val cs = IO.contextShift(ec)
+  println(fib3(100).unsafeRunSync())
+
+  // Concurrent start + cancel
+
+  // fibers as being lightweight threads, a fiber being the pure and light equivalent of a thread that can be either joined (via join) or interrupted (via cancel).
+
+
+
+  val launchMissiles = IO.raiseError(new Exception("boom!"))
+  val runToBunker = IO(println("To the bunker!!!"))
+
+  for {
+    fiber <- launchMissiles.start
+    _ <- runToBunker.handleErrorWith { error =>
+      // Retreat failed, cancel launch (maybe we should
+      // have retreated to our bunker before the launch?)
+      fiber.cancel *> IO.raiseError(error)
+    }
+    aftermath <- fiber.join
+  } yield {
+    aftermath
+  }
+
+
+  // runCancelable & unsafeRunCancelable
+  println("Canceabble============")
+  import scala.concurrent.duration._
+
+  implicit val timer = IO.timer(ec)
+
+  // Delayed println
+  val io1: IO[Unit] = IO.sleep(1.seconds) *> IO(println("Hello!"))
+
+  val cancel: IO[Unit] =
+    io1.unsafeRunCancelable(r => println(s"Done: $r"))
+
+  // ... if a race condition happens, we can cancel it,
+  // thus canceling the scheduling of `IO.sleep`
+  println(cancel.unsafeRunSync())
 }
 
