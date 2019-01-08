@@ -26,7 +26,7 @@ object SideEffectEx1 extends App {
     * ((),())
     * ======================
     *
-    * */
+    **/
 
   // Clearly Substituting value does not result in same output.. => it has side effect.
   //

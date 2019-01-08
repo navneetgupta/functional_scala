@@ -8,6 +8,7 @@ import cats.Monad
 
 trait Transfer[F[_]] {
   def copy(source: File, dest: File): F[Long]
+
   def transfer(input: InputStream, output: OutputStream): F[Long]
 }
 
@@ -17,10 +18,12 @@ trait Transfer[F[_]] {
 
 trait Stream[F[_]] {
   def inputStream(f: File): Resource[F, FileInputStream]
+
   def outputStream(f: File): Resource[F, FileOutputStream]
+
   def inputOutputStream(
-      in: File,
-      out: File): Resource[F, (FileInputStream, FileOutputStream)]
+                         in: File,
+                         out: File): Resource[F, (FileInputStream, FileOutputStream)]
 }
 
 object Stream {
@@ -29,6 +32,7 @@ object Stream {
 
 trait Console[F[_]] {
   def putStrLn(str: String): F[Unit]
+
   def readLn(): F[String]
 }
 
@@ -37,29 +41,30 @@ object Console {
 }
 
 object FileContentTransferEx {
-  def inputStream[F[_]: Stream](f: File): Resource[F, FileInputStream] =
+  def inputStream[F[_] : Stream](f: File): Resource[F, FileInputStream] =
     Stream[F].inputStream(f)
 
-  def outputStream[F[_]: Stream](f: File): Resource[F, FileOutputStream] =
+  def outputStream[F[_] : Stream](f: File): Resource[F, FileOutputStream] =
     Stream[F].outputStream(f)
 
-  def inputOutputStream[F[_]: Stream](
-      in: File,
-      out: File): Resource[F, (FileInputStream, FileOutputStream)] =
+  def inputOutputStream[F[_] : Stream](
+                                        in: File,
+                                        out: File): Resource[F, (FileInputStream, FileOutputStream)] =
     Stream[F].inputOutputStream(in, out)
 
-  def copy[F[_]: Transfer](source: File, dest: File): F[Long] =
+  def copy[F[_] : Transfer](source: File, dest: File): F[Long] =
     implicitly[Transfer[F]].copy(source, dest)
+
   // Above implicitly could be also used instead fo defining `def apply[F[_]](implicit F: Transfer[F]): Transfer[F] = F` in object and using Transfer[F].copy(source,dest)
 
 
-  def transfer[F[_]: Transfer](input: InputStream,
-                               output: OutputStream): F[Long] =
+  def transfer[F[_] : Transfer](input: InputStream,
+                                output: OutputStream): F[Long] =
     implicitly[Transfer[F]].transfer(input, output)
 
-  def putStrLn[F[_]: Console](line: String): F[Unit] = Console[F].putStrLn(line)
+  def putStrLn[F[_] : Console](line: String): F[Unit] = Console[F].putStrLn(line)
 
-  def readLn[F[_]: Console](): F[String] = Console[F].readLn()
+  def readLn[F[_] : Console](): F[String] = Console[F].readLn()
 
   def transmit(origin: InputStream,
                destination: OutputStream,
@@ -69,15 +74,15 @@ object FileContentTransferEx {
       amount <- IO(origin.read(buffer, 0, buffer.size))
       count <- if (amount > -1)
         IO(destination.write(buffer, 0, amount)) >> transmit(origin,
-                                                             destination,
-                                                             buffer,
-                                                             acc + amount)
+          destination,
+          buffer,
+          acc + amount)
       else
         IO.pure(acc) // End of read stream reached (by java.io.InputStream contract), nothing to write
     } yield count // Returns the actual amount of bytes transmitted
 
-  def main[F[_]: Stream: Transfer: Monad: Console](source: File,
-                                                   dest: File): F[Unit] = {
+  def main[F[_] : Stream : Transfer : Monad : Console](source: File,
+                                                       dest: File): F[Unit] = {
     for {
       count <- FileContentTransferEx.copy(source, dest)
       _ <- putStrLn(
@@ -94,19 +99,19 @@ object ExampleApp extends IOApp {
       Resource.make {
         IO(new FileInputStream(f)) // build
       } { inStream =>
-        IO(inStream.close()).handleErrorWith( _ => IO.unit) // release
+        IO(inStream.close()).handleErrorWith(_ => IO.unit) // release
       }
 
     def outputStream(f: File): Resource[IO, FileOutputStream] =
       Resource.make {
         IO(new FileOutputStream(f)) // build
       } { outStream =>
-        IO(outStream.close()).handleErrorWith( _ => IO.unit) // release
+        IO(outStream.close()).handleErrorWith(_ => IO.unit) // release
       }
 
     def inputOutputStream(
-        in: File,
-        out: File): Resource[IO, (FileInputStream, FileOutputStream)] =
+                           in: File,
+                           out: File): Resource[IO, (FileInputStream, FileOutputStream)] =
       for {
         inStream <- inputStream(in)
         outStream <- outputStream(out)

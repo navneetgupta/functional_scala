@@ -17,14 +17,17 @@ object ExternalInteractionWithIO extends IOApp {
     for {
       _ <- program
     } yield ExitCode.Success
+
   // Problem :: How to test `program` written is behaving properly or not. Until we run it we cannnot test it.
   // Soultion Approach Tagless Final
 
 }
 
 object Common {
+
   trait Console[F[_]] {
     def putStrLn(str: String): F[Unit]
+
     def readLn(): F[String]
   }
 
@@ -32,18 +35,19 @@ object Common {
     def apply[F[_]](implicit F: Console[F]): Console[F] = F
   }
 
-  def putStrLn[F[_]: Console](line: String): F[Unit] = Console[F].putStrLn(line)
+  def putStrLn[F[_] : Console](line: String): F[Unit] = Console[F].putStrLn(line)
 
-  def readLn[F[_]: Console](): F[String] = Console[F].readLn()
+  def readLn[F[_] : Console](): F[String] = Console[F].readLn()
 
 }
+
 //
 object TaglessSupportedEx {
 
   import Common._
   import cats.Monad
 
-  def program[F[_]: Common.Console: Monad]: F[Unit] =
+  def program[F[_] : Common.Console : Monad]: F[Unit] =
     for {
       _ <- putStrLn("Enter Your Name: ")
       name <- readLn
@@ -66,16 +70,17 @@ object StdConsoleApp extends IOApp {
 }
 
 object TaglessSupportEx2 extends IOApp {
+
   import cats.Monad
 
-  def program[F[_]: Monad](implicit C: Common.Console[F]): F[Unit] =
+  def program[F[_] : Monad](implicit C: Common.Console[F]): F[Unit] =
     for {
       _ <- C.putStrLn("Enter Your Name: ")
       name <- C.readLn
       _ <- C.putStrLn(s"Hello Dear $name")
     } yield ()
 
-  class StdConsole[F[_]: Sync] extends Common.Console[F] {
+  class StdConsole[F[_] : Sync] extends Common.Console[F] {
     override def putStrLn(str: String): F[Unit] = Sync[F].delay(println(str))
 
     override def readLn(): F[String] = Sync[F].delay(scala.io.StdIn.readLine)
@@ -137,23 +142,24 @@ object TaglessSupportEx2 extends IOApp {
 
 // To test pure logic
 object TestTaglessProgramEx extends App {
+
   import cats.Monad
 
-  def program[F[_]: Monad](implicit C: Common.Console[F]): F[Unit] =
+  def program[F[_] : Monad](implicit C: Common.Console[F]): F[Unit] =
     for {
       _ <- C.putStrLn("Enter Your Name: ")
       name <- C.readLn
       _ <- C.putStrLn(s"Hello Dear $name")
     } yield ()
 
-  class TestConsole[F[_]: Applicative](state: Ref[F, List[String]])
-      extends Common.Console[F] {
+  class TestConsole[F[_] : Applicative](state: Ref[F, List[String]])
+    extends Common.Console[F] {
     override def putStrLn(str: String): F[Unit] = state.update(_ :+ str)
 
     override def readLn(): F[String] = "test".pure[F]
   }
 
-//  implicit def ConsoleIO(state: Ref[IO, List[String]]) =  new TestConsole[IO](state)
+  //  implicit def ConsoleIO(state: Ref[IO, List[String]]) =  new TestConsole[IO](state)
 
   val spec = for {
     state <- Ref.of[IO, List[String]](List.empty[String])

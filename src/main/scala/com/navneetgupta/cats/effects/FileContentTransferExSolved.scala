@@ -12,6 +12,7 @@ object CommonModel {
 
   trait Transfer[F[_]] {
     def copy(source: File, dest: File)(implicit concurrent: Concurrent[F]): F[Long]
+
     def transfer(input: InputStream, output: OutputStream): F[Long]
   }
 
@@ -21,7 +22,9 @@ object CommonModel {
 
   trait Stream[F[_]] {
     def inputStream(f: File, guard: Semaphore[F]): Resource[F, FileInputStream]
+
     def outputStream(f: File, guard: Semaphore[F]): Resource[F, FileOutputStream]
+
     def inputOutputStream(
                            in: File,
                            out: File, guard: Semaphore[F]): Resource[F, (FileInputStream, FileOutputStream)]
@@ -33,6 +36,7 @@ object CommonModel {
 
   trait Console[F[_]] {
     def putStrLn(str: String): F[Unit]
+
     def readLn(): F[String]
   }
 
@@ -43,29 +47,30 @@ object CommonModel {
 }
 
 object FileContentTransferExSolved {
-  def inputStream[F[_]: CommonModel.Stream](f: File, guard: Semaphore[F]): Resource[F, FileInputStream] =
+  def inputStream[F[_] : CommonModel.Stream](f: File, guard: Semaphore[F]): Resource[F, FileInputStream] =
     CommonModel.Stream[F].inputStream(f, guard)
 
-  def outputStream[F[_]: CommonModel.Stream](f: File, guard: Semaphore[F]): Resource[F, FileOutputStream] =
+  def outputStream[F[_] : CommonModel.Stream](f: File, guard: Semaphore[F]): Resource[F, FileOutputStream] =
     CommonModel.Stream[F].outputStream(f, guard)
 
-  def inputOutputStream[F[_]: CommonModel.Stream](
-      in: File,
-      out: File, guard: Semaphore[F]): Resource[F, (FileInputStream, FileOutputStream)] =
+  def inputOutputStream[F[_] : CommonModel.Stream](
+                                                    in: File,
+                                                    out: File, guard: Semaphore[F]): Resource[F, (FileInputStream, FileOutputStream)] =
     CommonModel.Stream[F].inputOutputStream(in, out, guard)
 
-  def copy[F[_]: CommonModel.Transfer](source: File, dest: File)(implicit concurrent: Concurrent[F]): F[Long] =
+  def copy[F[_] : CommonModel.Transfer](source: File, dest: File)(implicit concurrent: Concurrent[F]): F[Long] =
     implicitly[CommonModel.Transfer[F]].copy(source, dest)
+
   // Above implicitly could be also used instead fo defining `def apply[F[_]](implicit F: Transfer[F]): Transfer[F] = F` in object and using Transfer[F].copy(source,dest)
 
 
-  def transfer[F[_]: CommonModel.Transfer](input: InputStream,
-                               output: OutputStream): F[Long] =
+  def transfer[F[_] : CommonModel.Transfer](input: InputStream,
+                                            output: OutputStream): F[Long] =
     implicitly[CommonModel.Transfer[F]].transfer(input, output)
 
-  def putStrLn[F[_]: CommonModel.Console](line: String): F[Unit] = CommonModel.Console[F].putStrLn(line)
+  def putStrLn[F[_] : CommonModel.Console](line: String): F[Unit] = CommonModel.Console[F].putStrLn(line)
 
-  def readLn[F[_]: CommonModel.Console](): F[String] = CommonModel.Console[F].readLn()
+  def readLn[F[_] : CommonModel.Console](): F[String] = CommonModel.Console[F].readLn()
 
   def transmit(origin: InputStream,
                destination: OutputStream,
@@ -75,15 +80,15 @@ object FileContentTransferExSolved {
       amount <- IO(origin.read(buffer, 0, buffer.size))
       count <- if (amount > -1)
         IO(destination.write(buffer, 0, amount)) >> transmit(origin,
-                                                             destination,
-                                                             buffer,
-                                                             acc + amount)
+          destination,
+          buffer,
+          acc + amount)
       else
         IO.pure(acc) // End of read stream reached (by java.io.InputStream contract), nothing to write
     } yield count // Returns the actual amount of bytes transmitted
 
-  def main[F[_]: CommonModel.Stream: CommonModel.Transfer: Monad: CommonModel.Console](source: File,
-                                                   dest: File)(implicit concurrent: Concurrent[F]): F[Unit] = {
+  def main[F[_] : CommonModel.Stream : CommonModel.Transfer : Monad : CommonModel.Console](source: File,
+                                                                                           dest: File)(implicit concurrent: Concurrent[F]): F[Unit] = {
     for {
       count <- FileContentTransferExSolved.copy(source, dest)
       _ <- putStrLn(
@@ -115,8 +120,8 @@ object FileContentTransferExSolvedApp extends IOApp {
       }
 
     def inputOutputStream(
-        in: File,
-        out: File, guard: Semaphore[IO]): Resource[IO, (FileInputStream, FileOutputStream)] =
+                           in: File,
+                           out: File, guard: Semaphore[IO]): Resource[IO, (FileInputStream, FileOutputStream)] =
       for {
         inStream <- inputStream(in, guard)
         outStream <- outputStream(out, guard)
@@ -149,6 +154,7 @@ object FileContentTransferExSolvedApp extends IOApp {
 
     def readLn(): IO[String] = IO(scala.io.StdIn.readLine)
   }
+
   override def run(args: List[String]): IO[ExitCode] =
     for {
       _ <- if (args.length < 2)
@@ -173,4 +179,4 @@ object FileContentTransferExSolvedApp extends IOApp {
   * IO is able to encapsulate side-effects, but the capacity to define concurrent and/or async and/or cancelable IO
   * instances comes from the existence of a Concurrent[IO] instance. Concurrent[F[_]] is a type class that, for an F
   * carrying a side-effect, brings the ability to cancel or start concurrently the side-effect in F.
-  * */
+  **/
