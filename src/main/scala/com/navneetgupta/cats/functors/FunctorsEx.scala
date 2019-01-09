@@ -27,7 +27,6 @@ import cats.implicits._
   * Identity: calling map with the identity function is the same as doing nothing: fa.map(a => a) == fa
   * Composition: mapping with two functions f and g is the same as mapping with f and then mapping with g: fa.map(g(f(_))) == fa.map(f).map(g)
   */
-
 sealed trait Tree[+A]
 
 final case class Branch[A](left: Tree[A], right: Tree[A]) extends Tree[A]
@@ -45,7 +44,7 @@ object Tree {
 object CustomInstances {
   implicit val treeFunctor: Functor[Tree] = new Functor[Tree] {
     override def map[A, B](a: Tree[A])(f: A => B): Tree[B] = a match {
-      case Leaf(value) => Leaf(f(value))
+      case Leaf(value)         => Leaf(f(value))
       case Branch(left, right) => Branch(map(left)(f), map(right)(f))
     }
   }
@@ -63,9 +62,7 @@ object Data {
           branch(leaf(10), leaf(1)),
           leaf(3)
         ),
-        branch(leaf(4),
-          branch(leaf(5), leaf(6))
-        )
+        branch(leaf(4), branch(leaf(5), leaf(6)))
       )
     )
 }
