@@ -19,10 +19,11 @@ scalacOptions ++= Seq(
   "-language:implicitConversions"
 )
 
-addCompilerPlugin("org.scalamacros" % "paradise" % "2.1.0" cross CrossVersion.full)
+//addCompilerPlugin("org.scalamacros" % "paradise" % "2.1.0" cross CrossVersion.full)
 
 addCompilerPlugin("org.spire-math" %% "kind-projector" % "0.9.6")
 addCompilerPlugin("com.olegpy" %% "better-monadic-for" % "0.3.0-M4")
+addCompilerPlugin("org.scalameta" % "paradise" % "3.0.0-M11" cross CrossVersion.full)
 
 libraryDependencies ++= {
 	val akkaVersion = "2.5.13"
@@ -46,6 +47,7 @@ libraryDependencies ++= {
     "com.chuusai" %% "shapeless" % "2.3.3",
     "org.scalaz" %% "scalaz-zio" % "0.5.1",
     "org.apache.commons" % "commons-io" % "1.3.2",
-    "io.chrisdavenport" %% "cats-par" % "0.2.0"
+    "io.chrisdavenport" %% "cats-par" % "0.2.0",
+    "io.frees" %% "frees-core" % "0.8.2"
 	)
 }
