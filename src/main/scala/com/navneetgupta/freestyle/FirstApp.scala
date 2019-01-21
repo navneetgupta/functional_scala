@@ -5,10 +5,14 @@ import freestyle.free.implicits._
 
 
 object First {
+
+  // FS[_], used in the smart constructors, as FS[_] = FreeS.Par[F], which in turn is an alias for Free[FreeApplicative[F, ?], ?]
   @free trait Validation {
-    def minSize(s: String, n: Int): FS[Boolean]
-    def hasNumber(s: String): FS[Boolean]
-  }
+      def minSize(s: String, n: Int): FS[Boolean]
+      def hasNumber(s: String): FS[Boolean]
+    }
+
+
 
   @free trait Interaction {
     def tell(msg: String): FS[Unit]
