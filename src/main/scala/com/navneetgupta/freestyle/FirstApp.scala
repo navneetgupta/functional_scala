@@ -3,7 +3,6 @@ package com.navneetgupta.freestyle
 import freestyle.free._
 import freestyle.free.implicits._
 
-
 object First {
 
   // FS[_], used in the smart constructors, as FS[_] = FreeS.Par[F], which in turn is an alias for Free[FreeApplicative[F, ?], ?]

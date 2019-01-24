@@ -18,7 +18,7 @@ object ResourceManagementApp {
     * 2.  it’s only meant for synchronous execution, so we can’t use it when working with abstractions capable of asynchrony (e.g. IO, Task, Future)
     * 3.  finally executes irregardless of the exception type, indiscriminately, so if you get an out of memory error it still tries to close the file handle, unnecessarily delaying a process crash
     * 4.  if the body of try throws an exception, then followed by the body of finally also throwing an exception, then the exception of finally gets rethrown, hiding the original problem
-    * */
+    **/
 
   def readFirstLine(file: File): IO[String] =
     IO(new BufferedReader(new FileReader(file))).bracket { in =>
@@ -32,6 +32,7 @@ object ResourceManagementApp {
   // Of special consideration is that bracket calls the release action on cancellation as well
 
   implicit val context = IO.contextShift(global)
+
   def readFile(file: File): IO[String] = {
     // Opens file with an asynchronous boundary before it,
     // ensuring that processing doesn't block the "current thread"
@@ -57,11 +58,11 @@ object ResourceManagementApp {
     }
   }
 
-//  The bracketCase operation is the generalized bracket, also receiving an ExitCase in release in order to distinguish between:
-//
-//      successful completion
-//      completion in error
-//      cancellation
+  //  The bracketCase operation is the generalized bracket, also receiving an ExitCase in release in order to distinguish between:
+  //
+  //      successful completion
+  //      completion in error
+  //      cancellation
 
   import cats.effect.ExitCase.{Canceled, Completed, Error}
 
@@ -75,6 +76,7 @@ object ResourceManagementApp {
       case (in, Canceled) =>
         IO(in.close())
     }
+
   // In this example we are only closing the passed resource in case cancellation occurred.
   // As to why we’re doing this — consider that the BufferedReader reference was given to us and usually the
   // producer of such a resource should also be in charge of releasing it. If this function would release

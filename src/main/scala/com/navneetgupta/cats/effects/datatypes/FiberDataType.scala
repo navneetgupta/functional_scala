@@ -25,7 +25,9 @@ object FiberDataType extends App {
 
 
   val launchMissiles = IO.raiseError(new Exception("Boom!!! Boom !!!"))
-  val returnToBuker: IO[Unit] = IO{println("Returned to Bunker")}
+  val returnToBuker: IO[Unit] = IO {
+    println("Returned to Bunker")
+  }
 
   val res = for {
     fiber <- launchMissiles.start

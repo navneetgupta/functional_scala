@@ -10,7 +10,7 @@ object IOErrorHandling extends App {
 
 
   println(boom.attempt.unsafeRunSync())
-//  boom.unsafeRunSync()
+  //  boom.unsafeRunSync()
 
   import cats.effect._
   import cats.syntax.all._
@@ -32,5 +32,5 @@ object IOErrorHandling extends App {
 
 
   implicit val timer = IO.timer(ExecutionContext.global)
-  retryWithBackoff(boom, 1.second, 3 ).attempt.unsafeRunSync()
+  retryWithBackoff(boom, 1.second, 3).attempt.unsafeRunSync()
 }

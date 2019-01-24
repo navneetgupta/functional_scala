@@ -74,15 +74,18 @@ object IODataType extends App {
 
   // Synchronous effect: equivalent of Sync[IO].delay, describing IO operations that can be evaluated immediately, on the current thread and call-stack:
   // its execution being “suspended” in the IO context.
-  IO{println("Hello!!")}.unsafeRunSync()
+  IO {
+    println("Hello!!")
+  }.unsafeRunSync()
 
   // Deffered Execution IO.suspend
 
-  def fib2(n: Int, a: Long = 0, b: Long = 1) : IO[Long] =
+  def fib2(n: Int, a: Long = 0, b: Long = 1): IO[Long] =
     IO.suspend(
-      if(n > 0) fib(n-1, b, a+b)
+      if (n > 0) fib(n - 1, b, a + b)
       else IO.pure(b)
     )
+
   println("Deffered----------------")
   println(fib2(100).unsafeRunSync())
 
@@ -109,7 +112,6 @@ object IODataType extends App {
   // fibers as being lightweight threads, a fiber being the pure and light equivalent of a thread that can be either joined (via join) or interrupted (via cancel).
 
 
-
   val launchMissiles = IO.raiseError(new Exception("boom!"))
   val runToBunker = IO(println("To the bunker!!!"))
 
@@ -128,6 +130,7 @@ object IODataType extends App {
 
   // runCancelable & unsafeRunCancelable
   println("Canceabble============")
+
   import scala.concurrent.duration._
 
   implicit val timer = IO.timer(ec)

@@ -64,7 +64,9 @@ object IOParallelisim extends App {
   //If you have a list of data and a way of turning each item into an IO, but you want a single IO for the results you can use parTraverse to run the steps in parallel.
   //
   val results = NonEmptyList.of(1, 2, 3).parTraverse { i =>
-    IO{i}
+    IO {
+      i
+    }
   }
 
   println(results)

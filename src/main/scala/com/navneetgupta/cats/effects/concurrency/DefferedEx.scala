@@ -26,7 +26,7 @@ object DefferedEx extends App {
     *
     *
     * The restriction on the uncancelable builder is just Async, whereas the restriction on the normal apply builder is Concurrent.
-    * */
+    **/
 
   // When u need who wins the race will be first taken
   // The loser one will raise an error when trying to complete a deferred already completed and

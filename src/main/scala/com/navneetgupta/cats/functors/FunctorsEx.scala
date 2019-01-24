@@ -44,7 +44,7 @@ object Tree {
 object CustomInstances {
   implicit val treeFunctor: Functor[Tree] = new Functor[Tree] {
     override def map[A, B](a: Tree[A])(f: A => B): Tree[B] = a match {
-      case Leaf(value)         => Leaf(f(value))
+      case Leaf(value) => Leaf(f(value))
       case Branch(left, right) => Branch(map(left)(f), map(right)(f))
     }
   }

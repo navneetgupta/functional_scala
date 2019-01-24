@@ -5,7 +5,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 object IODataTypeConversions extends App {
- // Conversions
+  // Conversions
 
   // Lazy evaluation, equivalent with by-name parameters:
   println(IO.fromFuture(IO {
