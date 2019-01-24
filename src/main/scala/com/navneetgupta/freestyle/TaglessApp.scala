@@ -70,7 +70,7 @@ object TaglessExTryApp extends App {
 
 object TaglessExTrySafeApp extends App {
   import cats.free.Free
-  
+
   implicit val ValidationIOHandler = new TaglessEx.Validation.Handler[Try] {
     override def minSize(s: String, n: Int) = Try {s.length >= n}
     override def hasNumber(s: String) : Try[Boolean] = Try{s.exists(c => "0123456789".contains(c))}
