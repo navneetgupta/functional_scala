@@ -50,15 +50,14 @@ object ModuleProgram {
   def program[F[_]](implicit app: MApp[F]): FreeS[F, Long]  = {
     import app.display._, app.persistence._
     for {
-    cachedToken <- cache.get(1)
-    id          <- idValidation.validate(cachedToken)
-    value       <- database.get(id)
-    view <- presenter.show(value)
-  } yield view
-
+      cachedToken <- cache.get(1)
+      id <- idValidation.validate(cachedToken)
+      value <- database.get(id)
+      view <- presenter.show(value)
+    } yield view
   }
 }
 object ModuleApp extends App {
-  implicit val
+//  implicit val
 
 }

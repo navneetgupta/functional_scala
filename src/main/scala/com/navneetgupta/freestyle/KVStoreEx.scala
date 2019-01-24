@@ -1,16 +1,19 @@
 package com.navneetgupta.freestyle
 
-import com.navneetgupta.freestyle.KVStoreEx.Backend
+import cats.implicits._
 import freestyle.free._
 import freestyle.free.implicits._
-import scalaz.Alpha.K
 
 object KVStoreEx {
+
   @free trait KVStore {
     def get[A](key: String): FS[Option[A]]
-    def put[A](key : String, value: A) : FS[Unit]
-    def delete[A](key: String) : FS[Unit]
-    def update[A](key: String, f: A => A): FS.seq[Unit] =
+
+    def put[A](key: String, value: A): FS[Unit]
+
+    def delete[A](key: String): FS[Unit]
+
+    def update[A](key: String, f: A => A): FS.Seq[Unit] =
       get[A](key).freeS flatMap {
         case Some(a) => put[A](key, f(a)).freeS
         case None => ().pure[FS.Seq]
@@ -19,6 +22,7 @@ object KVStoreEx {
 
   @free trait Log {
     def info(msg: String): FS[Unit]
+
     def warn(msg: String): FS[Unit]
   }
 
@@ -26,9 +30,10 @@ object KVStoreEx {
     val kvstore: KVStore
     val log: Log
   }
+
 }
 
-object KVStoreInterpreters {
+object KVStoreApp extends App {
   import KVStoreEx._
   import cats.data.State
 
@@ -48,13 +53,23 @@ object KVStoreInterpreters {
 
     override def warn(msg: String): KVStoreState[Unit] = println(s"WARN: $msg").pure[KVStoreState]
   }
-}
 
-object KVStoreApp extends App {
-  def program[F[_]](implicit backend: Backend): Frees[F, Unit] = {
-    import backend.kvstore._, import backend.log._
+  def program[F[_]](implicit backend: Backend[F]): FreeS[F,Option[Int]] = {
+    import backend.kvstore._
+    import backend.log._
     for {
-      
-    }
+      _ <- put("wild-cats", 2)
+      _ <- info("Added wild-cats")
+      _ <- update[Int]("wild-cats", (_ + 12))
+      _ <- info("Updated wild-cats")
+      _ <- put("tame-cats", 5)
+      n <- get[Int]("wild-cats")
+      _ <- delete("tame-cats")
+      _ <- warn("Deleted tame-cats")
+    } yield n
   }
+
+  import freestyle.free.implicits._
+
+  println(program[Backend.Op].interpret[KVStoreState].run(Map.empty).value)
 }
