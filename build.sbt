@@ -49,6 +49,7 @@ libraryDependencies ++= {
     "org.apache.commons" % "commons-io" % "1.3.2",
     "io.chrisdavenport" %% "cats-par" % "0.2.0",
     "io.frees" %% "frees-core" % "0.8.2",
-    "io.frees" %% "frees-logging" % "0.8.2"
+    "io.frees" %% "frees-logging" % "0.8.2",
+    "io.frees" %% "frees-effects" % "0.8.2"
 	)
 }
