@@ -37,7 +37,6 @@ object ReaderEffectEx extends App {
       b <- rd.ReaderM[F].reader(_.n)
       c <- FreeS.pure(1)
     } yield a + b + c
-  // programReader: [F[_]](implicit evidence$1: rd.ReaderM[F])cats.free.Free[[β$0$]cats.free.FreeApplicative[F,β$0$],Int]
 
   println(programReader[rd.ReaderM.Op].interpret[ConfigEnv].run(Config(n = 1)))
 }
