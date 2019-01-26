@@ -9,7 +9,8 @@ object ReaderEffectEx extends App {
   // reader effect allows obtaining values from the environment.
   // The initial seed for the environment value is provided at runtime interpretation.
   // reader effect supports parametrization to any seed value type while remaining type safe throughout the program declaration.
-  //needs to be implicit evidence of cats.mtl.ApplicativeAsk[M, R] and Monad[M] for any runtime M[_] used in its interpretation due to the constraints placed by this effect. R
+  //needs to be implicit evidence of cats.mtl.ApplicativeAsk[M, R] and Monad[M] for any runtime M[_] used in its interpretation due to the constraints placed by this effect.
+  // reader effect comes with two operations ask and reader.
 
   case class Config(n: Int)
   type ConfigEnv[A] = Reader[Config, A]
