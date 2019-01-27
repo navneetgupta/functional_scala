@@ -51,6 +51,7 @@ libraryDependencies ++= {
     "io.frees" %% "frees-core" % "0.8.2",
     "io.frees" %% "frees-logging" % "0.8.2",
     "io.frees" %% "frees-effects" % "0.8.2",
-    "io.frees" %% "frees-cache" % "0.8.2"
+    "io.frees" %% "frees-cache" % "0.8.2",
+    "org.scalactic" %% "scalactic" % "3.0.5"
 	)
 }
