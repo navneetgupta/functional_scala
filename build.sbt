@@ -38,7 +38,6 @@ libraryDependencies ++= {
     "org.typelevel" %% "cats-kernel" % catVersion,
     "org.typelevel" %% "cats-laws" % catVersion,
     "org.typelevel" %% "cats-free" % catVersion,
-    "org.typelevel" %% "cats-free" % catVersion,
     "org.typelevel" %% "cats-effect" % "1.1.0",
     "org.typelevel" %% "cats-effect-laws" % "1.1.0" % "test",
     "org.typelevel" %% "kittens" % "1.1.1",
