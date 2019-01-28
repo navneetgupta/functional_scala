@@ -1,13 +1,19 @@
 package com.navneetgupta.scala
 
+import cats.data.{EitherT, OptionT}
+import com.navneetgupta.scala.WithoutMT.MyError
+
 import scala.concurrent.{ExecutionContext, Future}
 
 object MonadTrasformer extends App {
 
-  case class User(name: String, email: String, id: Long)
+  case class User(name: String, email: String, id: Long, surName: Option[String] = None, canBeUpdated: Boolean = false)
   case class Address(line1: String, line2: String, state: String, pincode: Int, user: User)
 
-  val userMap: Map[Long, User] = Map(1L -> User("Navneet Kumar", "nkumar@nkumar.com", 1), 2L -> User("Navneet Gupta", "ngupta@ngupta.com" ,2))
+  val userMap: Map[Long, User] = Map(
+    1L -> User("Navneet Kumar", "nkumar@nkumar.com", 1),
+    2L -> User("Navneet Gupta", "ngupta@ngupta.com" ,2),
+    3L -> User("Gupta Navneet", "gNavneet@gNavneet.com" ,3, Some("Gupta"), true))
   val addressMap: Map[User, Address] = Map(
     userMap.get(1).get -> Address("Line 1", "Line 2", "State 1", 123456, userMap.get(1).get),
     userMap.get(2).get -> Address("Another Line 1", "Another Line 2", "State 2", 123456, userMap.get(2).get))
@@ -113,6 +119,56 @@ object MonadTrasformer extends App {
   println(findAddressByUserIdOption3(1).onComplete(println(_)))
 
   println(findAddressByUserIdOption3(3).onComplete(println(_)))
+
+
+
+  def getUserById(id: Long): Future[Option[User]] = Future {userMap.get(id)}
+  def getEmail(user: User): Future[String] = Future{user.email}
+  def getSurName(user: User): Option[String] = user.surName
+
+//  def getSurNameAndEmail(id: Long): Future[(String,String)] =
+//    for {
+//      user <- FutOpt(getUserById(id))
+//      email <- FutOpt(getEmail(user))
+//      surName <- FutOpt(getSurName(user))
+//    } yield (email,surName)
+
+  //Basically FutOpt is OptionT in functional Library
+
+  import cats.implicits._
+
+  def getSurNameAndEmail(id: Long): OptionT[Future,(String,String)] =
+    for {
+      user <- OptionT(getUserById(id))
+      email <- OptionT.liftF(getEmail(user))
+      surName <- OptionT.fromOption(getSurName(user))
+    } yield (email,surName)
+
+
+
+
+
+  // Cehck the naive verison in WithoutMT.scala file
+
+
+  // Improvement Option[User] => Either[MyError, User]
+
+  type ResultT[F[_], A] = EitherT[F, MyError, A]
+  type FutureResult[A] = ResultT[Future, A]
+
+  def checkUserExist(id: Long): FutureResult[User] = ???
+  def canBeUpdated(u: User) : FutureResult[User] = ???
+  def updateUserOnMap(u: User): FutureResult[User] = ???
+
+
+  def updateUserNaive(u : User): FutureResult[User] =
+    for {
+      user          <-  checkUserExist(u.id)
+      _             <-  canBeUpdated(user)
+      updatedUser   <-  updateUserOnMap(user)
+    } yield updatedUser
+
 }
+
 
 
