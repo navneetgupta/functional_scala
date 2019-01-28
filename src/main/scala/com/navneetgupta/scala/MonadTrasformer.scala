@@ -7,7 +7,7 @@ object MonadTrasformer extends App {
   case class User(name: String, email: String, id: Long)
   case class Address(line1: String, line2: String, state: String, pincode: Int, user: User)
 
-  val userMap: Map[Long, User] = Map(1 -> User("Navneet Kumar", "nkumar@nkumar.com", 1), 2 -> User("Navneet Gupta", "ngupta@ngupta.com" ,2))
+  val userMap: Map[Long, User] = Map(1L -> User("Navneet Kumar", "nkumar@nkumar.com", 1), 2L -> User("Navneet Gupta", "ngupta@ngupta.com" ,2))
   val addressMap: Map[User, Address] = Map(
     userMap.get(1).get -> Address("Line 1", "Line 2", "State 1", 123456, userMap.get(1).get),
     userMap.get(2).get -> Address("Another Line 1", "Another Line 2", "State 2", 123456, userMap.get(2).get))
@@ -24,7 +24,9 @@ object MonadTrasformer extends App {
     } yield address
 
 
-  println(findAddressByUserId(1))
+  println(findAddressByUserId(1).onComplete(println(_)))
+
+  println(findAddressByUserId(3).onComplete(println(_))) // Exception
 
   // We are forcing above findUserById/findAddressByUser to have the value using .get on option  userMap.get(id).get/ addressMap.get(user).get
   // Whihc will throw exception if incorrect ID not found.
@@ -87,7 +89,6 @@ object MonadTrasformer extends App {
       address <- FutOpt(findAddressByUserOption(user))
     } yield address).value
 
-  // Now it works competely Fine
 
   //If we look closely, we’ll realize we don’t need to know anything specific about the “outer” Monad
   // (Future and List from the previous examples). As long as we can map and flatMap over it, we’re fine.
@@ -100,6 +101,18 @@ object MonadTrasformer extends App {
   //  in other words, OptionT[F, A] is a flat version of F[Option[A]] that has its own map and flatMap.
 
   //Notice that OptionT is also a monad, so we can use it in a for-comprehension
+
+
+
+  //
+
+  println(findAddressByUserIdOption2(1).onComplete(println(_)))
+
+  println(findAddressByUserIdOption2(3).onComplete(println(_)))
+
+  println(findAddressByUserIdOption3(1).onComplete(println(_)))
+
+  println(findAddressByUserIdOption3(3).onComplete(println(_)))
 }
 
 
