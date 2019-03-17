@@ -1,6 +1,6 @@
 package com.navneetgupta.scala
 
-import cats.data.{EitherT, OptionT}
+import cats.data.EitherT
 import com.navneetgupta.scala.WithoutMT.MyError
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -8,24 +8,30 @@ import scala.concurrent.{ExecutionContext, Future}
 object MonadTrasformer extends App {
 
   case class User(name: String, email: String, id: Long, surName: Option[String] = None, canBeUpdated: Boolean = false)
+
   case class Address(line1: String, line2: String, state: String, pincode: Int, user: User)
 
   val userMap: Map[Long, User] = Map(
     1L -> User("Navneet Kumar", "nkumar@nkumar.com", 1),
-    2L -> User("Navneet Gupta", "ngupta@ngupta.com" ,2),
-    3L -> User("Gupta Navneet", "gNavneet@gNavneet.com" ,3, Some("Gupta"), true))
+    2L -> User("Navneet Gupta", "ngupta@ngupta.com", 2),
+    3L -> User("Gupta Navneet", "gNavneet@gNavneet.com", 3, Some("Gupta"), true))
   val addressMap: Map[User, Address] = Map(
     userMap.get(1).get -> Address("Line 1", "Line 2", "State 1", 123456, userMap.get(1).get),
     userMap.get(2).get -> Address("Another Line 1", "Another Line 2", "State 2", 123456, userMap.get(2).get))
 
   implicit val ec: ExecutionContext = ExecutionContext.global
 
-  def findUserById(id: Long): Future[User] = Future {userMap.get(id).get}
-  def findAddressByUser(user: User): Future[Address] = Future{addressMap.get(user).get}
+  def findUserById(id: Long): Future[User] = Future {
+    userMap.get(id).get
+  }
+
+  def findAddressByUser(user: User): Future[Address] = Future {
+    addressMap.get(user).get
+  }
 
   def findAddressByUserId(id: Long): Future[Address] =
     for {
-      user    <- findUserById(id)
+      user <- findUserById(id)
       address <- findAddressByUser(user)
     } yield address
 
@@ -40,15 +46,20 @@ object MonadTrasformer extends App {
 
   // Now lets make it optional
 
-  def findUserByIdOption(id: Long): Future[Option[User]] = Future {userMap.get(id)}
-  def findAddressByUserOption(user: User): Future[Option[Address]] = Future{addressMap.get(user)}
+  def findUserByIdOption(id: Long): Future[Option[User]] = Future {
+    userMap.get(id)
+  }
+
+  def findAddressByUserOption(user: User): Future[Option[Address]] = Future {
+    addressMap.get(user)
+  }
 
 
-//  def findAddressByUserIdOption(id: Long): Future[Option[Address]] =
-//    for {
-//      user    <- findUserByIdOption(id)
-//      address <- findAddressByUserOption(user)
-//    } yield address
+  //  def findAddressByUserIdOption(id: Long): Future[Option[Address]] =
+  //    for {
+  //      user    <- findUserByIdOption(id)
+  //      address <- findAddressByUserOption(user)
+  //    } yield address
 
   // The above deifination will not work since  <- is just a fancy way of writing flatMap and that if you flatMap
   // over a Future[Option[User]] you get to work with a Option[User] .
@@ -61,7 +72,7 @@ object MonadTrasformer extends App {
   def findAddressByUserIdOption2(id: Long): Future[Option[Address]] =
     findUserByIdOption(id).flatMap {
       case Some(user) => findAddressByUserOption(user)
-      case None       => Future.successful(None)
+      case None => Future.successful(None)
     }
 
   // If you have two Functors for A and B (i.e. you know how to map over A and over B), you can compose them together,
@@ -75,13 +86,14 @@ object MonadTrasformer extends App {
   //  It turns out this is a well known fact: Monads do not compose, at least not generically.
 
 
-//  let’s write a wrapper for Future[Option[A]] that provides its own map and flatMap.
+  //  let’s write a wrapper for Future[Option[A]] that provides its own map and flatMap.
 
 
   case class FutOpt[A](value: Future[Option[A]]) {
 
     def map[B](f: A => B): FutOpt[B] =
       FutOpt(value.map(optA => optA.map(f)))
+
     def flatMap[B](f: A => FutOpt[B]): FutOpt[B] =
       FutOpt(value.flatMap(opt => opt match {
         case Some(a) => f(a).value
@@ -91,7 +103,7 @@ object MonadTrasformer extends App {
 
   def findAddressByUserIdOption3(id: Long): Future[Option[Address]] =
     (for {
-      user    <- FutOpt(findUserByIdOption(id))
+      user <- FutOpt(findUserByIdOption(id))
       address <- FutOpt(findAddressByUserOption(user))
     } yield address).value
 
@@ -103,11 +115,10 @@ object MonadTrasformer extends App {
 
   // The Above FutOpt is magically called OptionT or Option Monad Transformer
 
-//  OptionT has two type parameters F and A, where F is the wrapping Monad and A is type inside Option:
+  //  OptionT has two type parameters F and A, where F is the wrapping Monad and A is type inside Option:
   //  in other words, OptionT[F, A] is a flat version of F[Option[A]] that has its own map and flatMap.
 
   //Notice that OptionT is also a monad, so we can use it in a for-comprehension
-
 
 
   //
@@ -121,31 +132,33 @@ object MonadTrasformer extends App {
   println(findAddressByUserIdOption3(3).onComplete(println(_)))
 
 
+  def getUserById(id: Long): Future[Option[User]] = Future {
+    userMap.get(id)
+  }
 
-  def getUserById(id: Long): Future[Option[User]] = Future {userMap.get(id)}
-  def getEmail(user: User): Future[String] = Future{user.email}
+  def getEmail(user: User): Future[String] = Future {
+    user.email
+  }
+
   def getSurName(user: User): Option[String] = user.surName
 
-//  def getSurNameAndEmail(id: Long): Future[(String,String)] =
-//    for {
-//      user <- FutOpt(getUserById(id))
-//      email <- FutOpt(getEmail(user))
-//      surName <- FutOpt(getSurName(user))
-//    } yield (email,surName)
+  //  def getSurNameAndEmail(id: Long): Future[(String,String)] =
+  //    for {
+  //      user <- FutOpt(getUserById(id))
+  //      email <- FutOpt(getEmail(user))
+  //      surName <- FutOpt(getSurName(user))
+  //    } yield (email,surName)
 
   //Basically FutOpt is OptionT in functional Library
 
   import cats.implicits._
-
-  def getSurNameAndEmail(id: Long): OptionT[Future,(String,String)] =
-    for {
-      user <- OptionT(getUserById(id))
-      email <- OptionT.liftF(getEmail(user))
-      surName <- OptionT.fromOption(getSurName(user))
-    } yield (email,surName)
-
-
-
+  //
+  //  def getSurNameAndEmail(id: Long): OptionT[Future,(String,String)] =
+  //    for {
+  //      user <- OptionT(getUserById(id))
+  //      email <- OptionT.liftF(getEmail(user))
+  //      surName <- OptionT.fromOption(getSurName(user))
+  //    } yield (email,surName)
 
 
   // Cehck the naive verison in WithoutMT.scala file
@@ -157,15 +170,17 @@ object MonadTrasformer extends App {
   type FutureResult[A] = ResultT[Future, A]
 
   def checkUserExist(id: Long): FutureResult[User] = ???
-  def canBeUpdated(u: User) : FutureResult[User] = ???
+
+  def canBeUpdated(u: User): FutureResult[User] = ???
+
   def updateUserOnMap(u: User): FutureResult[User] = ???
 
 
-  def updateUserNaive(u : User): FutureResult[User] =
+  def updateUserNaive(u: User): FutureResult[User] =
     for {
-      user          <-  checkUserExist(u.id)
-      _             <-  canBeUpdated(user)
-      updatedUser   <-  updateUserOnMap(user)
+      user <- checkUserExist(u.id)
+      _ <- canBeUpdated(user)
+      updatedUser <- updateUserOnMap(user)
     } yield updatedUser
 
 }
