@@ -30,7 +30,6 @@ object FPMax {
   }
 }
 
-
 object FPMax2 {
 
   def parseInt(s: String): Option[Int] = Try(s.toInt).toOption

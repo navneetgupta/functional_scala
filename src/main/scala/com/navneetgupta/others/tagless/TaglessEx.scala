@@ -22,9 +22,6 @@ object TaglessEx {
     def flatMap[B](ab: A => F[B])(implicit P: CMonad[F]): F[B] = P.flatMap(fa)(ab)
   }
 
-  def pure[F[_], A](a: => A)(implicit P: CMonad[F]): F[A] = P.pure(a)
-
-
   trait Console[F[_]] {
     def putStrLn(msg: String): F[Unit]
 
@@ -65,10 +62,6 @@ object Program1 extends App {
   program.unsafeRunSync()
 }
 
-
-
-
-
 object Program1Test extends App {
 
   import TaglessEx._
@@ -82,14 +75,13 @@ object Program1Test extends App {
 
   }
 
-  case class TestIO[A](run: TestData => (TestData, A)) { self =>
-    def map[B](ab: A => B): TestIO[B] = TestIO(t => self.run(t) match {
-      case (t, a) => (t, ab(a))
-    })
+  case class TestIO[A](run: TestData => (TestData, A)) { s =>
 
-    def flatMap[B](afb: A => TestIO[B]): TestIO[B] = TestIO(t => self.run(t) match {
-      case (t, a) => afb(a).run(t)
-    })
+    def map[B](f: A => B): TestIO[B] = flatMap(a => TestIO.value(f(a)))
+
+    def flatMap[B](f: A => TestIO[B]): TestIO[B] =
+      TestIO(d =>
+        (s run d) match { case (d, a) => f(a) run d })
 
     def eval(t: TestData): TestData = run(t)._1
   }
@@ -116,8 +108,8 @@ object Program1Test extends App {
 
   def programTestIO: TestIO[Unit] = program[TestIO]
 
-
   val testData = TestData(List("Navneet Gupta"), Nil)
   println(programTestIO.eval(testData).showResults)
 }
+
 
