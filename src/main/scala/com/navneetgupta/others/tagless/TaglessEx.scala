@@ -4,12 +4,6 @@ import cats.effect.IO
 
 object TaglessEx {
 
-  trait Console[F[_]] {
-    def putStrLn(msg: String): F[Unit]
-
-    val getStrLn: F[String]
-  }
-
   trait CMonad[F[_]] {
     def pure[A](a: A): F[A]
 
@@ -23,28 +17,30 @@ object TaglessEx {
     def apply[F[_]](implicit F: CMonad[F]): CMonad[F] = F
   }
 
-  object Console {
-    def apply[F[_]](implicit console: Console[F]): Console[F] = console
-  }
-
-  class ConsoleIO extends Console[IO] {
-    override def putStrLn(msg: String): IO[Unit] = IO(scala.Console.println(msg))
-
-    override val getStrLn: IO[String] = IO(scala.io.StdIn.readLine)
-  }
-
   implicit class CMoandSyntax[F[_], A](fa: F[A]) {
     def map[B](ab: A => B)(implicit P: CMonad[F]): F[B] = P.map(fa)(ab)
     def flatMap[B](ab: A => F[B])(implicit P: CMonad[F]): F[B] = P.flatMap(fa)(ab)
   }
 
-  def program[F[_] : Console : CMonad]: F[String] =
+  def pure[F[_], A](a: => A)(implicit P: CMonad[F]): F[A] = P.pure(a)
+
+
+  trait Console[F[_]] {
+    def putStrLn(msg: String): F[Unit]
+
+    def getStrLn: F[String]
+  }
+
+  object Console {
+    def apply[F[_]](implicit console: Console[F]): Console[F] = console
+  }
+
+  def program[F[_] : CMonad : Console]: F[Unit] =
     for {
       _ <- Console[F].putStrLn("Good morning, what's your name?")
       name <- Console[F].getStrLn
       _ <- Console[F].putStrLn(s"Great to meet you, $name")
-    } yield name
-
+    } yield ()
 }
 
 object Program1 extends App {
@@ -57,21 +53,33 @@ object Program1 extends App {
     override def flatMap[A, B](value: IO[A])(func: A => IO[B]): IO[B] = value.flatMap(func)
   }
 
+  class ConsoleIO extends Console[IO] {
+    def putStrLn(msg: String): IO[Unit] = IO(scala.Console.println(msg))
+
+    def getStrLn: IO[String] = IO(scala.io.StdIn.readLine)
+  }
+
   implicit val console: Console[IO] = new ConsoleIO
   implicit val iOCMonad: CMonad[IO] = new IOCMonad
 
   program.unsafeRunSync()
 }
 
+
+
+
+
 object Program1Test extends App {
 
   import TaglessEx._
 
   case class TestData(input: List[String], output: List[String]) {
+
     def putStrLn(line: String): (TestData, Unit) = (copy(output = line :: output), Unit)
-    val getStrLn: (TestData, String) = (copy(input = input.drop(1)), input.head)
+    def getStrLn: (TestData, String) = (copy(input = input.drop(1)), input.head)
 
     def showResults = output.reverse.mkString("\n")
+
   }
 
   case class TestIO[A](run: TestData => (TestData, A)) { self =>
@@ -91,9 +99,9 @@ object Program1Test extends App {
   }
 
   class ConsoleTestIO extends Console[TestIO] {
-    override def putStrLn(msg: String): TestIO[Unit] = TestIO(t => t.putStrLn(msg))
+    def putStrLn(msg: String): TestIO[Unit] = TestIO(t => t.putStrLn(msg))
 
-    override val getStrLn: TestIO[String] = TestIO(t => t.getStrLn)
+    def getStrLn: TestIO[String] = TestIO(t => t.getStrLn)
   }
 
   class TestIOMonad extends CMonad[TestIO]{
@@ -106,11 +114,10 @@ object Program1Test extends App {
   implicit val consoleTestIO : Console[TestIO] = new ConsoleTestIO
   implicit val testIOMonad: CMonad[TestIO] = new TestIOMonad
 
-
-  def programTestIO: TestIO[String] = program[TestIO]
+  def programTestIO: TestIO[Unit] = program[TestIO]
 
 
   val testData = TestData(List("Navneet Gupta"), Nil)
-  programTestIO.eval(testData).showResults
+  println(programTestIO.eval(testData).showResults)
 }
 

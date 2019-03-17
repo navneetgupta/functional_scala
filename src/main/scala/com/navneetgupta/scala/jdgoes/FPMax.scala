@@ -150,7 +150,7 @@ object FPMax2 {
       _ <- putStrLn("Hey There!! Want To Play the Game? Let's Start By Entering Your Name?")
       name <- getStrLn()
       _ <- putStrLn(s"Hello Dear ${name}, Lets Start the Game.")
-      _ <- gameLoop(name)
+//      _ <- gameLoop(name)
     } yield ()
   }
 
