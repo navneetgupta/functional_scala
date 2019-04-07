@@ -1,0 +1,161 @@
+Java HotSpot(TM) 64-Bit Server VM warning: ignoring option MaxPermSize=350m; support was removed in 8.0
+[    127]   WARN - .intellij.util.EnvironmentUtil - can't get shell environment 
+java.lang.Exception: bin:/Users/navneetgupta/Desktop/tools/WebStorm-141.1550/bin
+	at com.intellij.util.EnvironmentUtil.getShellEnv(EnvironmentUtil.java:150)
+	at com.intellij.util.EnvironmentUtil.access$000(EnvironmentUtil.java:41)
+	at com.intellij.util.EnvironmentUtil$1.call(EnvironmentUtil.java:54)
+	at com.intellij.util.EnvironmentUtil$1.call(EnvironmentUtil.java:50)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:748)
+[   3717]   WARN - api.vfs.impl.local.FileWatcher - /Users/navneetgupta/Desktop/tools/WebStorm-141.1550/bin/fsnotifier: /Users/navneetgupta/Desktop/tools/WebStorm-141.1550/bin/fsnotifier: cannot execute binary file 
+[   3724]   WARN - api.vfs.impl.local.FileWatcher - Watcher terminated with exit code 126 
+[   3734]   WARN - api.vfs.impl.local.FileWatcher - /Users/navneetgupta/Desktop/tools/WebStorm-141.1550/bin/fsnotifier: /Users/navneetgupta/Desktop/tools/WebStorm-141.1550/bin/fsnotifier: cannot execute binary file 
+[   3734]   WARN - api.vfs.impl.local.FileWatcher - Watcher terminated with exit code 126 
+[   3743]   WARN - api.vfs.impl.local.FileWatcher - /Users/navneetgupta/Desktop/tools/WebStorm-141.1550/bin/fsnotifier: /Users/navneetgupta/Desktop/tools/WebStorm-141.1550/bin/fsnotifier: cannot execute binary file 
+[   3743]   WARN - api.vfs.impl.local.FileWatcher - Watcher terminated with exit code 126 
+[   3752]   WARN - api.vfs.impl.local.FileWatcher - /Users/navneetgupta/Desktop/tools/WebStorm-141.1550/bin/fsnotifier: /Users/navneetgupta/Desktop/tools/WebStorm-141.1550/bin/fsnotifier: cannot execute binary file 
+[   3752]   WARN - api.vfs.impl.local.FileWatcher - Watcher terminated with exit code 126 
+[   3762]   WARN - api.vfs.impl.local.FileWatcher - /Users/navneetgupta/Desktop/tools/WebStorm-141.1550/bin/fsnotifier: /Users/navneetgupta/Desktop/tools/WebStorm-141.1550/bin/fsnotifier: cannot execute binary file 
+[   3763]   WARN - api.vfs.impl.local.FileWatcher - Watcher terminated with exit code 126 
+[   3773]   WARN - api.vfs.impl.local.FileWatcher - /Users/navneetgupta/Desktop/tools/WebStorm-141.1550/bin/fsnotifier: /Users/navneetgupta/Desktop/tools/WebStorm-141.1550/bin/fsnotifier: cannot execute binary file 
+[   3773]   WARN - api.vfs.impl.local.FileWatcher - Watcher terminated with exit code 126 
+[   3783]   WARN - api.vfs.impl.local.FileWatcher - /Users/navneetgupta/Desktop/tools/WebStorm-141.1550/bin/fsnotifier: /Users/navneetgupta/Desktop/tools/WebStorm-141.1550/bin/fsnotifier: cannot execute binary file 
+[   3783]   WARN - api.vfs.impl.local.FileWatcher - Watcher terminated with exit code 126 
+[   3793]   WARN - api.vfs.impl.local.FileWatcher - /Users/navneetgupta/Desktop/tools/WebStorm-141.1550/bin/fsnotifier: /Users/navneetgupta/Desktop/tools/WebStorm-141.1550/bin/fsnotifier: cannot execute binary file 
+[   3794]   WARN - api.vfs.impl.local.FileWatcher - Watcher terminated with exit code 126 
+[   3804]   WARN - api.vfs.impl.local.FileWatcher - /Users/navneetgupta/Desktop/tools/WebStorm-141.1550/bin/fsnotifier: /Users/navneetgupta/Desktop/tools/WebStorm-141.1550/bin/fsnotifier: cannot execute binary file 
+[   3804]   WARN - api.vfs.impl.local.FileWatcher - Watcher terminated with exit code 126 
+[   3815]   WARN - api.vfs.impl.local.FileWatcher - /Users/navneetgupta/Desktop/tools/WebStorm-141.1550/bin/fsnotifier: /Users/navneetgupta/Desktop/tools/WebStorm-141.1550/bin/fsnotifier: cannot execute binary file 
+[   3815]   WARN - api.vfs.impl.local.FileWatcher - Watcher terminated with exit code 126 
+[   3826]   WARN - api.vfs.impl.local.FileWatcher - /Users/navneetgupta/Desktop/tools/WebStorm-141.1550/bin/fsnotifier: /Users/navneetgupta/Desktop/tools/WebStorm-141.1550/bin/fsnotifier: cannot execute binary file 
+[   3826]   WARN - api.vfs.impl.local.FileWatcher - Watcher terminated with exit code 126 
+[   3830]   WARN - api.vfs.impl.local.FileWatcher - File watcher failed to start 
+[   4091]  ERROR -    #com.intellij.lang.Language - Language with ID 'Markdown' is already registered: class com.vladsch.idea.multimarkdown.MarkdownLanguage 
+java.lang.Throwable
+	at com.intellij.openapi.diagnostic.Logger.error(Logger.java:115)
+	at com.intellij.lang.Language.<init>(Language.java:81)
+	at com.intellij.lang.Language.<init>(Language.java:66)
+	at org.intellij.plugins.markdown.lang.MarkdownLanguage.<init>(MarkdownLanguage.java:25)
+	at org.intellij.plugins.markdown.lang.MarkdownLanguage.<clinit>(MarkdownLanguage.java:22)
+	at org.intellij.plugins.markdown.lang.MarkdownFileType.<init>(MarkdownFileType.java:30)
+	at org.intellij.plugins.markdown.lang.MarkdownFileType.<clinit>(MarkdownFileType.java:27)
+	at org.intellij.plugins.markdown.lang.MarkdownFileTypeFactory.createFileTypes(MarkdownFileTypeFactory.java:25)
+	at com.intellij.openapi.fileTypes.impl.FileTypeManagerImpl.initStandardFileTypes(FileTypeManagerImpl.java:270)
+	at com.intellij.openapi.fileTypes.impl.FileTypeManagerImpl.<init>(FileTypeManagerImpl.java:230)
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:62)
+	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
+	at java.lang.reflect.Constructor.newInstance(Constructor.java:423)
+	at org.picocontainer.defaults.InstantiatingComponentAdapter.newInstance(InstantiatingComponentAdapter.java:193)
+	at org.picocontainer.defaults.ConstructorInjectionComponentAdapter$1.run(ConstructorInjectionComponentAdapter.java:220)
+	at org.picocontainer.defaults.ThreadLocalCyclicDependencyGuard.observe(ThreadLocalCyclicDependencyGuard.java:53)
+	at org.picocontainer.defaults.ConstructorInjectionComponentAdapter.getComponentInstance(ConstructorInjectionComponentAdapter.java:248)
+	at com.intellij.util.pico.ConstructorInjectionComponentAdapter.getComponentInstance(ConstructorInjectionComponentAdapter.java:58)
+	at com.intellij.openapi.components.impl.ComponentManagerImpl$ComponentConfigComponentAdapter$1.getComponentInstance(ComponentManagerImpl.java:550)
+	at com.intellij.openapi.components.impl.ComponentManagerImpl$ComponentConfigComponentAdapter.getComponentInstance(ComponentManagerImpl.java:610)
+	at com.intellij.util.pico.DefaultPicoContainer.getLocalInstance(DefaultPicoContainer.java:245)
+	at com.intellij.util.pico.DefaultPicoContainer.getComponentInstance(DefaultPicoContainer.java:211)
+	at com.intellij.openapi.components.impl.ComponentManagerImpl.createComponent(ComponentManagerImpl.java:125)
+	at com.intellij.openapi.application.impl.ApplicationImpl.createComponent(ApplicationImpl.java:354)
+	at com.intellij.openapi.components.impl.ComponentManagerImpl.a(ComponentManagerImpl.java:116)
+	at com.intellij.openapi.components.impl.ComponentManagerImpl.init(ComponentManagerImpl.java:87)
+	at com.intellij.openapi.components.impl.stores.ApplicationStoreImpl.load(ApplicationStoreImpl.java:101)
+	at com.intellij.openapi.application.impl.ApplicationImpl.load(ApplicationImpl.java:499)
+	at com.intellij.openapi.application.impl.ApplicationImpl.load(ApplicationImpl.java:481)
+	at com.intellij.idea.IdeaApplication.run(IdeaApplication.java:170)
+	at com.intellij.idea.MainImpl$1$1$1.run(MainImpl.java:62)
+	at java.awt.event.InvocationEvent.dispatch(InvocationEvent.java:311)
+	at java.awt.EventQueue.dispatchEventImpl(EventQueue.java:756)
+	at java.awt.EventQueue.access$500(EventQueue.java:97)
+	at java.awt.EventQueue$3.run(EventQueue.java:709)
+	at java.awt.EventQueue$3.run(EventQueue.java:703)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:80)
+	at java.awt.EventQueue.dispatchEvent(EventQueue.java:726)
+	at com.intellij.ide.IdeEventQueue.dispatchEvent(IdeEventQueue.java:362)
+	at java.awt.EventDispatchThread.pumpOneEventForFilters(EventDispatchThread.java:201)
+	at java.awt.EventDispatchThread.pumpEventsForFilter(EventDispatchThread.java:116)
+	at java.awt.EventDispatchThread.pumpEventsForHierarchy(EventDispatchThread.java:105)
+	at java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:101)
+	at java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:93)
+	at java.awt.EventDispatchThread.run(EventDispatchThread.java:82)
+[   4091]  ERROR -    #com.intellij.lang.Language - WebStorm 10.0.4  Build #WS-141.1550 
+[   4091]  ERROR -    #com.intellij.lang.Language - JDK: 1.8.0_131 
+[   4091]  ERROR -    #com.intellij.lang.Language - VM: Java HotSpot(TM) 64-Bit Server VM 
+[   4091]  ERROR -    #com.intellij.lang.Language - Vendor: Oracle Corporation 
+[   4091]  ERROR -    #com.intellij.lang.Language - OS: Mac OS X 
+[   6672]   WARN - om.intellij.util.ProfilingUtil - Profiling agent is not enabled. Add -agentlib:yjpagent to idea.vmoptions if necessary to profile IDEA. 
+[   6765]   WARN - j.ui.mac.MacMainFrameDecorator - no url bundle present. 
+To use platform protocol handler to open external links specify required protocols in the mac app layout section of the build file
+Example: args.urlSchemes = ["your-protocol"] will handle following links: your-protocol://open?file=file&line=line 
+[  10474]   WARN - tartup.impl.StartupManagerImpl - /Users/navneetgupta/Desktop/mybitbuckets/github/javascript/dps/.idea/misc.xml 
+java.io.FileNotFoundException: /Users/navneetgupta/Desktop/mybitbuckets/github/javascript/dps/.idea/misc.xml
+	at com.intellij.openapi.util.io.FileUtil.isFileSystemCaseSensitive(FileUtil.java:1590)
+	at com.intellij.ide.startup.impl.StartupManagerImpl.a(StartupManagerImpl.java:252)
+	at com.intellij.ide.startup.impl.StartupManagerImpl.runPostStartupActivities(StartupManagerImpl.java:187)
+	at com.intellij.openapi.project.impl.ProjectManagerImpl$8$2.run(ProjectManagerImpl.java:496)
+	at java.awt.event.InvocationEvent.dispatch(InvocationEvent.java:311)
+	at java.awt.EventQueue.dispatchEventImpl(EventQueue.java:756)
+	at java.awt.EventQueue.access$500(EventQueue.java:97)
+	at java.awt.EventQueue$3.run(EventQueue.java:709)
+	at java.awt.EventQueue$3.run(EventQueue.java:703)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:80)
+	at java.awt.EventQueue.dispatchEvent(EventQueue.java:726)
+	at com.intellij.ide.IdeEventQueue.e(IdeEventQueue.java:734)
+	at com.intellij.ide.IdeEventQueue._dispatchEvent(IdeEventQueue.java:569)
+	at com.intellij.ide.IdeEventQueue.dispatchEvent(IdeEventQueue.java:382)
+	at com.intellij.ide.IdeEventQueue.pumpEventsForHierarchy(IdeEventQueue.java:818)
+	at com.intellij.openapi.progress.util.ProgressWindow.startBlocking(ProgressWindow.java:197)
+	at com.intellij.openapi.application.impl.ApplicationImpl.runProcessWithProgressSynchronously(ApplicationImpl.java:633)
+	at com.intellij.openapi.progress.impl.CoreProgressManager.runProcessWithProgressSynchronously(CoreProgressManager.java:363)
+	at com.intellij.openapi.progress.impl.ProgressManagerImpl.runProcessWithProgressSynchronously(ProgressManagerImpl.java:76)
+	at com.intellij.openapi.progress.impl.CoreProgressManager.runProcessWithProgressSynchronously(CoreProgressManager.java:240)
+	at com.intellij.openapi.progress.impl.CoreProgressManager.runProcessWithProgressSynchronously(CoreProgressManager.java:193)
+	at com.intellij.openapi.project.impl.ProjectManagerImpl.openProject(ProjectManagerImpl.java:475)
+	at com.intellij.platform.PlatformProjectOpenProcessor.doOpenProject(PlatformProjectOpenProcessor.java:222)
+	at com.intellij.ide.RecentDirectoryProjectsManager.doOpenProject(RecentDirectoryProjectsManager.java:56)
+	at com.intellij.ide.RecentProjectsManagerBase.doReopenLastProject(RecentProjectsManagerBase.java:357)
+	at com.intellij.ide.RecentProjectsManagerBase$MyAppLifecycleListener.appStarting(RecentProjectsManagerBase.java:384)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at com.intellij.util.messages.impl.MessageBusConnectionImpl.deliverMessage(MessageBusConnectionImpl.java:116)
+	at com.intellij.util.messages.impl.MessageBusImpl.doPumpMessages(MessageBusImpl.java:322)
+	at com.intellij.util.messages.impl.MessageBusImpl.pumpMessages(MessageBusImpl.java:309)
+	at com.intellij.util.messages.impl.MessageBusImpl.sendMessage(MessageBusImpl.java:288)
+	at com.intellij.util.messages.impl.MessageBusImpl.access$200(MessageBusImpl.java:41)
+	at com.intellij.util.messages.impl.MessageBusImpl$2.invoke(MessageBusImpl.java:177)
+	at com.sun.proxy.$Proxy46.appStarting(Unknown Source)
+	at com.intellij.idea.IdeaApplication$IdeStarter$2.run(IdeaApplication.java:328)
+	at com.intellij.openapi.application.impl.LaterInvocator$FlushQueue.run(LaterInvocator.java:332)
+	at java.awt.event.InvocationEvent.dispatch(InvocationEvent.java:311)
+	at java.awt.EventQueue.dispatchEventImpl(EventQueue.java:756)
+	at java.awt.EventQueue.access$500(EventQueue.java:97)
+	at java.awt.EventQueue$3.run(EventQueue.java:709)
+	at java.awt.EventQueue$3.run(EventQueue.java:703)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:80)
+	at java.awt.EventQueue.dispatchEvent(EventQueue.java:726)
+	at com.intellij.ide.IdeEventQueue.e(IdeEventQueue.java:734)
+	at com.intellij.ide.IdeEventQueue._dispatchEvent(IdeEventQueue.java:569)
+	at com.intellij.ide.IdeEventQueue.dispatchEvent(IdeEventQueue.java:382)
+	at java.awt.EventDispatchThread.pumpOneEventForFilters(EventDispatchThread.java:201)
+	at java.awt.EventDispatchThread.pumpEventsForFilter(EventDispatchThread.java:116)
+	at java.awt.EventDispatchThread.pumpEventsForHierarchy(EventDispatchThread.java:105)
+	at java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:101)
+	at java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:93)
+	at java.awt.EventDispatchThread.run(EventDispatchThread.java:82)
+objc[35423]: Class FIFinderSyncExtensionHost is implemented in both /System/Library/PrivateFrameworks/FinderKit.framework/Versions/A/FinderKit (0x7fff873683c8) and /System/Library/PrivateFrameworks/FileProvider.framework/OverrideBundles/FinderSyncCollaborationFileProviderOverride.bundle/Contents/MacOS/FinderSyncCollaborationFileProviderOverride (0x11807ef50). One of the two will be used. Which one is undefined.
+[1385190]   WARN - j.ui.mac.MacMainFrameDecorator - no url bundle present. 
+To use platform protocol handler to open external links specify required protocols in the mac app layout section of the build file
+Example: args.urlSchemes = ["your-protocol"] will handle following links: your-protocol://open?file=file&line=line 
+2019-04-07 11:03:31.672 java[35423:241488] *** Assertion failure in -[AWTWindow_Normal _changeJustMain], /BuildRoot/Library/Caches/com.apple.xbs/Sources/AppKit/AppKit-1671.40.119/AppKit.subproj/NSWindow.m:12742
+2019-04-07 11:03:51.560 java[35423:241488] *** Assertion failure in -[AWTWindow_Normal _changeJustMain], /BuildRoot/Library/Caches/com.apple.xbs/Sources/AppKit/AppKit-1671.40.119/AppKit.subproj/NSWindow.m:12742
+2019-04-07 11:10:14.647 java[35423:241488] *** Assertion failure in -[AWTWindow_Normal _changeJustMain], /BuildRoot/Library/Caches/com.apple.xbs/Sources/AppKit/AppKit-1671.40.119/AppKit.subproj/NSWindow.m:12742
+2019-04-07 11:10:36.953 java[35423:241488] *** Assertion failure in -[AWTWindow_Normal _changeJustMain], /BuildRoot/Library/Caches/com.apple.xbs/Sources/AppKit/AppKit-1671.40.119/AppKit.subproj/NSWindow.m:12742
+2019-04-07 11:10:37.167 java[35423:241488] *** Assertion failure in -[AWTWindow_Normal _changeJustMain], /BuildRoot/Library/Caches/com.apple.xbs/Sources/AppKit/AppKit-1671.40.119/AppKit.subproj/NSWindow.m:12742
+2019-04-07 11:10:52.218 java[35423:241488] *** Assertion failure in -[AWTWindow_Normal _changeJustMain], /BuildRoot/Library/Caches/com.apple.xbs/Sources/AppKit/AppKit-1671.40.119/AppKit.subproj/NSWindow.m:12742
