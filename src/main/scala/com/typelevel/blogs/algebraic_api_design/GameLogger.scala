@@ -9,3 +9,5 @@ trait GameLogger[F[_]] {
 object GameLogger {
   implicit def instance[F[_]]()(implicit G: GameLogger[F]) = G
 }
+
+
