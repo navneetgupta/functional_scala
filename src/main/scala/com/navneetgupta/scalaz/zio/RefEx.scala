@@ -9,14 +9,14 @@ object RefEx extends App {
   //  All operations on a Ref are atomic and thread-safe, providing a reliable foundation for synchronizing concurrent programs.
 
   for {
-    ref <- Ref(100)
+    ref <- Ref.make(100)
     v1 <- ref.get
     v2 <- ref.set(v1 - 50)
   } yield v2
 
   // Updating
   def repeat[E, A](n: Int)(io: IO[E, A]): IO[E, Unit] =
-    Ref(0).flatMap { iRef =>
+    Ref.make(0).flatMap { iRef =>
       def loop: IO[E, Unit] = iRef.get.flatMap { i =>
         if (i < n)
           io *> iRef.update(_ + 1) *> loop
@@ -33,7 +33,7 @@ object RefEx extends App {
 object RefEx2 extends App {
   def main2() = {
     for {
-      ref <- Ref(100)
+      ref <- Ref.make(100)
       v1 <- ref.get
       v2 <- ref.set(v1 - 50)
       _ <- putStrLn("Value v1 = " + v1)

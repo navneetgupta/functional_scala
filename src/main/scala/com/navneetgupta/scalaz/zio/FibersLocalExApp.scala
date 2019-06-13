@@ -1,6 +1,6 @@
 package com.navneetgupta.scalaz.zio
 
-import scalaz.zio.{FiberLocal, RTS}
+import scalaz.zio.{DefaultRuntime, FiberLocal}
 import scalaz.zio.console._
 
 object FibersLocalExApp extends App {
@@ -21,7 +21,7 @@ object FibersLocalExApp extends App {
     v = local.locally(10)(local.get)
   } yield v == Some(3)
 
-  val rts = new RTS {}
+  val rts = new DefaultRuntime {}
 
   rts.unsafeRun(
     for {

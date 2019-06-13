@@ -42,6 +42,6 @@ object ScheduleEx extends App {
   //  Combines two schedules sequentially, by following the first policy until it ends,
   //  and then following the second policy:
 
-  val sequential = Schedule.recurs(10) <||> Schedule.spaced(1.second)
+  val sequential = Schedule.recurs(10)andThen Schedule.spaced(1.second)
 
 }

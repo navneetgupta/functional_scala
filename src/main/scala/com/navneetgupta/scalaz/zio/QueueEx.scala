@@ -1,6 +1,6 @@
 package com.navneetgupta.scalaz.zio
 
-import scalaz.zio.{IO, Promise, Queue, RTS}
+import scalaz.zio.{DefaultRuntime, IO, Promise, Queue}
 import scalaz.zio.console._
 
 
@@ -65,7 +65,7 @@ object QueueEx extends App {
     _ <- f.join
   } yield ()
 
-  val rts = new RTS {}
+  val rts = new DefaultRuntime {}
 
   rts.unsafeRun(
     for {

@@ -3,7 +3,7 @@ package com.navneetgupta.scalaz.zio
 import java.io.IOException
 
 import scalaz.zio.console._
-import scalaz.zio.{IO, RTS}
+import scalaz.zio.{DefaultRuntime, IO}
 
 
 object FailureEx {
@@ -16,7 +16,7 @@ object FailureEx {
   //surface failures with attempt, which takes an IO[E, A] and produces an IO[E2, Either[E, A]].
   // The choice of E2 is unconstrained, because the resulting computation cannot fail with any error.
 
-  readUrls("data.json").attempt.map {
+  readUrls("data.json").either.map {
     case Left(_) => "42"
     case Right(data) => data
   }
@@ -49,11 +49,11 @@ object FailureEx {
   val z3: IO[IOException, Array[Byte]] = openFile("primary.json").orElse(openFile("backup.json"))
 
   //  If you want more control on the next action and better performance you can use the primitive which all the previous operations are based on,
-  //  it’s called redeem and it can be seen as the combination of flatMap and catchAll. It is useful if you find yourself using combinations of attempt
+  //  it’s called foldM and it can be seen as the combination of flatMap and catchAll. It is useful if you find yourself using combinations of attempt
   //  or catchAll with flatMap, using redeem you can achieve the same and avoid the intermediate Either allocation and the subsequent call to flatMap.
 
   val z4: IO[Nothing, Content] =
-    readUrls("urls.json").redeem(e => IO.point(NoContent(e)), fetchContent)
+    readUrls("urls.json").foldM(e => IO.succeedLazy(NoContent(e)), fetchContent)
 
   def readUrls[E, A](str: String): IO[E, A] = ???
 
@@ -67,7 +67,7 @@ object FailureEx {
 }
 
 object FailureExApp extends App {
-  val rts = new RTS {}
+  val rts = new DefaultRuntime {}
 
 
   def sqrt(io: IO[Nothing, Double]): IO[String, Double] =
@@ -83,7 +83,7 @@ object FailureExApp extends App {
 
   rts.unsafeRun(
     for {
-      sqrt5 <- sqrt(IO.point(5.0))
+      sqrt5 <- sqrt(IO.succeedLazy(5.0))
       _ <- putStrLn(s"sqrt of 5 is ${sqrt5}")
     } yield ())
 

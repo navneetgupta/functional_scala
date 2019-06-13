@@ -42,8 +42,8 @@ object BracketsEx extends App {
     * final def *>[E1 >: E, B](io: => IO[E1, B]): IO[E1, B] = self.flatMap(_ => io)
     */
 
-  val action: IO[Throwable, String] = IO.sync(i += 1) *> IO.fail(new Throwable("Boom!"))
-  val cleanupAction: IO[Nothing, Unit] = IO.sync(i -= 1)
+  val action: IO[Throwable, String] = IO.effectTotal(i += 1) *> IO.fail(new Throwable("Boom!"))
+  val cleanupAction: IO[Nothing, Unit] = IO.effectTotal(i -= 1)
   val composite = action.ensuring(cleanupAction)
 
 

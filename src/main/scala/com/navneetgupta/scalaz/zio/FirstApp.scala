@@ -6,10 +6,10 @@ import java.io.IOException
 
 object FirstApp extends App {
 
-  def run(args: List[String]): IO[Nothing, ExitStatus] =
-    myAppLogic.attempt.map(_.fold(_ => 1, _ => 0)).map(ExitStatus.ExitNow(_))
+  def run(args: List[String]) =
+    myAppLogic.fold(_ => 1, _ => 0)
 
-  def myAppLogic: IO[IOException, Unit] =
+  def myAppLogic =
     for {
       _ <- putStrLn("Hello! What is your name?")
       n <- getStrLn

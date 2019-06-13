@@ -1,7 +1,7 @@
 package com.navneetgupta.scalaz.zio
 
 import scalaz.zio.console._
-import scalaz.zio.{IO, App}
+import scalaz.zio.{ IO, App }
 
 object BasicEx {
 
@@ -14,9 +14,8 @@ object BasicEx {
   }
 
   def runInParallel[E, A, B](
-                              leftIO: IO[E, A],
-                              rightIO: IO[E, B]
-                            ) = {
+    leftIO: IO[E, A],
+    rightIO: IO[E, B]) = {
     for {
       leftBinder <- leftIO.fork
       rightBinder <- rightIO.fork
@@ -27,6 +26,6 @@ object BasicEx {
 }
 
 object BasicExApp extends App {
-  def run(args: List[String]): IO[Nothing, ExitStatus] =
-    BasicEx.main2().attempt.map(_.fold(_ => 1, _ => 0)).map(ExitStatus.ExitNow(_))
+  def run(args: List[String])=
+    BasicEx.main2().fold(_ => 1, _ => 0)
 }

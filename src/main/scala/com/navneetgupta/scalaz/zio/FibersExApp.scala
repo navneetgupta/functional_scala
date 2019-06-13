@@ -32,7 +32,7 @@ object FibersExApp {
 
 object FibersFibEx {
   def fib(n: Int): IO[Nothing, Int] = {
-    if (n <= 0) IO.point(1)
+    if (n <= 0) IO.succeedLazy(1)
     else {
       for {
         fiber1 <- fib(n - 2).fork
@@ -81,6 +81,6 @@ object FibersFibEx {
 }
 
 object FibersFibExApp extends App {
-  def run(args: List[String]): IO[Nothing, ExitStatus] =
-    FibersFibEx.test().attempt.map(_.fold(_ => 1, _ => 0)).map(ExitStatus.ExitNow(_))
+  def run(args: List[String]) =
+    FibersFibEx.test().fold(_ => 1, _ => 0)
 }

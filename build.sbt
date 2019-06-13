@@ -9,14 +9,15 @@ scalaVersion := "2.12.6"
 version      := "0.1.0"
 
 scalacOptions ++= Seq(
-  "-feature",
+//  "-feature",
   "-deprecation",
   "-unchecked",
   "-language:postfixOps",
   "-Xfatal-warnings",
   "-Ypartial-unification",
   "-language:higherKinds",
-  "-language:implicitConversions"
+  "-language:implicitConversions",
+
 )
 
 //addCompilerPlugin("org.scalamacros" % "paradise" % "2.1.0" cross CrossVersion.full)
@@ -44,7 +45,7 @@ libraryDependencies ++= {
     "com.github.mpilquist" %% "simulacrum" % "0.14.0",
     "org.scalatest" %% "scalatest" % "3.0.5",
     "com.chuusai" %% "shapeless" % "2.3.3",
-    "org.scalaz" %% "scalaz-zio" % "0.5.1",
+    "org.scalaz" %% "scalaz-zio" % "1.0-RC5",
     "org.apache.commons" % "commons-io" % "1.3.2",
     "io.chrisdavenport" %% "cats-par" % "0.2.0",
     "io.frees" %% "frees-core" % "0.8.2",
